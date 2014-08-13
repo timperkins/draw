@@ -1,0 +1,192 @@
+.panel-wrap {
+	position: fixed;
+	top: 36px;
+	right: 0;
+	bottom: 0;
+	width: 200px;
+  overflow: hidden;
+  .panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 600px;
+    transition: left 0.4s;
+    &.secondary {
+      left: -200px;
+    }
+    &.colors {
+      left: -400px;
+    }
+    .panel-main {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 200px;
+      
+      .btn-group-vertical.layer-layers {
+        display: block;
+        padding-top: 20px;
+        .btn {
+          padding: 0 5px;
+          height: 30px;
+          width: inherit;
+          background: transparent;
+          border-radius: 0 !important;
+          border: none;
+          border-left: solid 3px transparent;
+          cursor: default;
+          text-align: left;
+          width: inherit;
+          max-width: inherit;
+          &:hover {
+            background: #515151;
+          }
+          &.active {
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            border-color: #666;
+            background: #333;
+          }
+          .thumbnail {
+            float: left;
+            margin-right: 10px;
+            &.thumbnail-box {
+              width: 20px;
+              height: 20px;
+              margin-top: 5px;
+            }
+            &.thumbnail-text {
+              margin-top: 7px;
+            }
+          }
+
+          .text {
+            color: #fff;
+            font-size: 11px;
+            float: left;
+            line-height: 30px;
+            height: 30px;
+            margin: 0;
+            padding: 0;
+          }
+          .edit-layer {
+            color: #ccc;
+            float: right;
+            font-size: 18px;
+            display: none;
+            background: none;
+            border: none;
+            height: 18px;
+            padding: 4px;
+            &:hover {
+              color: #fff;
+            }
+          }
+          &:hover {
+            .edit-layer {
+              display: inherit;
+            }
+          }
+        }
+      }    
+    }
+    .top-wrap {
+      margin: 0 5px 15px 10px;
+      .back {
+        font-size: 20px;
+        color: #fff;
+      }
+    }
+    .panel-secondary {
+      position: absolute;
+      top: 0;
+      left: 200px;
+      bottom: 0;
+      width: 200px;
+      .input-dark {
+        font-size: 11px;
+        color: #fff;
+        border: solid 1px #393939;
+        background: #3d3d3d;
+        font-weight: 100;
+        padding: 4px 5px;
+        box-sizing: border-box;
+        outline: none;
+        border-radius: 3px;
+        &:hover {
+          border: solid 1px #2c2c2c;
+          background: #393939;
+        }
+        &:focus {
+          border: solid 1px #222;
+          background: #333;
+        }
+      }
+      
+      .layer-color {
+        width: 46px;
+        height: 20px;
+        float: right;
+        border: solid 1px #fff;
+        outline: none;
+        border-radius: 3px;
+      }    
+      
+      .title-edit-wrap {
+        padding: 0 5px;
+      }
+      .title-edit {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+      .attr-detail {
+        padding: 0 5px;
+        .clearfix();
+        .half-width-outer {
+          margin-left: -10px;
+          .half-width-wrap {
+            width: 50%;
+            float: left;
+            margin-bottom: 8px;
+            .half-width {
+              margin-left: 10px;
+              .clearfix();
+            }
+          }          
+        }
+
+        .attr-label {
+          float: left;
+          line-height: 24px;
+          font-size: 11px;
+          color: #fff;
+        }
+        .attr-edit {
+          width: 48px;
+          float: right;
+        }
+      }
+    }
+    .panel-colors {
+      position: absolute;
+      top: 0;
+      left: 400px;
+      bottom: 0;
+      width: 200px;
+      .btn-group.color-palette {
+        padding: 10px 8px;
+        .btn {
+          border-radius: 0;
+          width: 10px;
+          height: 10px;
+          padding: 0;
+          margin-left: 1px;
+          margin-bottom: 1px;
+        }
+      }
+    }
+  }
+}

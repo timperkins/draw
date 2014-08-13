@@ -1,0 +1,37 @@
+<div class="canvas-wrap" ng-controller="CanvasController">
+  <svg 
+    class="canvas" 
+    ng-class="{
+      draw: state.tool == 'rectangle', 
+      transform: state.tool == 'transform',
+      text: state.tool == 'text'
+    }" 
+    ng-mousedown="mouseDown($event)" 
+    ng-mousemove="mouseMove($event)" 
+    ng-mouseup="mouseUp($event)">
+
+    
+
+    <svg ng-repeat="layer in layers | reverse">
+      <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
+     <!--  <foreignObject ng-if="shape.type == 'text'" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}" ng-attr-width="{{ shape.getWidth() }}" ng-attr-height="{{ shape.getHeight() }}" ng-controller="ShapeCtrl" ng-class="{active: shape.active}">
+        <textarea 
+          class="svg-text" 
+          ng-controller="TextCtrl" 
+          ng-style="{
+            width: shape.getWidth() + 'px',
+            height: shape.getHeight() + 'px',
+            'font-size': shape.size + 'px',
+            color: shape.color
+          }" 
+          ng-click="click($event)" 
+          ng-mousedown="mouseDown($event)" 
+          ng-mouseup="mouseUp($event)" 
+          ng-focus="focus()"></textarea>
+      </foreignObject> -->
+    </svg>
+    <svg>
+      <draw-outline ng-if="layerCurrent.layer" layer="layerCurrent.layer"></draw-outline>
+    </svg> 
+  </svg>
+</div>

@@ -1,0 +1,31 @@
+.toolbar-wrap {
+  position: fixed;
+  left: 0;
+  top: 36px;
+  bottom: 0;
+  width: 36px;
+  // background: #444;
+  .btn-group-vertical {
+    display: block;
+    padding-top: 20px;
+    .btn {
+      padding: 5px 0 5px 1px;
+      width: inherit;
+      background: transparent;
+      border-radius: 0 !important;
+      border: none;
+      border-right: solid 3px transparent;
+      color: #fff;
+      cursor: default;
+      &:hover {
+        background: #515151;
+      }
+      &.active {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        border-color: #666;
+        background: #333;
+      }
+    }
+  }
+}

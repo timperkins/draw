@@ -1,0 +1,14 @@
+<svg class="layer-wrap">
+  <rect 
+  	class="layer" 
+  	ng-attr-x="{{ layer.x }}" 
+  	ng-attr-y="{{ layer.y }}" 
+  	ng-attr-width="{{ layer.width }}" 
+  	ng-attr-height="{{ layer.height }}" 
+  	ng-attr-stroke="{{ layer.stroke.color }}" 
+  	ng-attr-stroke-width="{{ layer.stroke.width }}" 
+    ng-attr-fill="{{ layer.color }}"
+    ng-attr-fill-opacity="{{ layer.drawing ? 0.3 : layer.fillOpacity * .01 }}"
+    ng-attr-rx="{{ layer.radius }}"
+    ng-attr-ry="{{ layer.radius }}" />
+</svg>

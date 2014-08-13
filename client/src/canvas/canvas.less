@@ -1,0 +1,94 @@
+.canvas-wrap {
+  position: fixed;
+  left: 36px;
+  top: 36px;
+  right: 200px;
+  bottom: 0;
+  background: #333;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: solid 1px #222;
+  .canvas {
+    display: block;
+    background: #fff;
+    width: 800px;
+    height: 500px;
+    margin: 20px auto 0 auto;
+    &.draw {
+      cursor: crosshair;
+      .layer-outline {
+        .outline.drawing {
+          stroke-width: 1;
+        }
+      }
+    }
+    &.transform {
+      cursor: move;
+
+      .layer-outline:hover .outline {
+          stroke-width: 1;
+        }
+
+        .resize-line {
+          stroke: rgba(0,0,0,0.0);
+          stroke-width: 8;
+          &.resize-line-n {
+            cursor: n-resize;
+          }
+          &.resize-line-e {
+            cursor: e-resize;
+          }
+          &.resize-line-s {
+            cursor: s-resize;
+          }
+          &.resize-line-w {
+            cursor: w-resize;
+          }
+        }        
+      }
+
+    }
+    &.text {
+      cursor: default;
+    }
+    .layer-outline {
+      .outline {
+        stroke-width: 0;
+        stroke: #000;
+        fill-opacity: 0;
+      }      
+    }
+
+    .dimension-text {
+      fill: blue;
+      font-size: 12px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .svg-text {
+      border: dashed 1px transparent;
+      background: transparent;
+      box-sizing: border-box;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      resize: none;
+      outline: none;
+      &:hover {
+        border-color: #ddd;
+      }
+    }
+    .active {
+      .svg-text {
+        border: dashed 1px #bbb;
+        &:focus {
+          border-color: #999;
+        }            
+      }
+    
+    }
+  }
+}

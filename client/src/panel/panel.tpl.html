@@ -1,0 +1,86 @@
+<div class="panel-wrap" ng-controller="PanelController">
+  <div class="panel" ng-class="{
+        secondary: state.panel == 'secondary',
+        colors: state.panel == 'colors'
+      }">
+    <div class="panel-main">
+      <div class="btn-group-vertical layer-layers" ui-sortable ng-model="layers">
+        <label class="btn" ng-repeat="layer in layers" ng-model="layerCurrent.layer" btn-radio="layer" ng-click="layerClick(layer)">
+          <div class="clearfix">
+            <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
+            <i ng-if="layer.type == 'text'" class="thumbnail thumbnail-text fa fa-font" ng-style="{color: '{{ colorPalette.color }}'}"></i>
+            <p class="text">{{ layer.title }}</p>
+            <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, layer)"></i> 
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="panel-secondary">
+      <div class="top-wrap">
+        <i class="back fa fa-arrow-left" ng-click="hideSecondary($event)"></i>
+      </div>
+      <div class="title-edit-wrap">
+        <input type="text" class="input-dark title-edit" ng-model="layerCurrent.layer.title" />
+        <br><br>
+      </div>
+      <div class="attr-detail">
+        <div class="half-width-outer">
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Opacity:</label><draw-input draw-model="layerCurrent.layer.fillOpacity" unit="%"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+            <label class="attr-label">Color:</label><button class="layer-color" ng-style="{background: layerCurrent.layer.color}" ng-click="showColors($event, layerCurrent.layer)"></button>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">X:</label><draw-input draw-model="layerCurrent.layer.x" unit="px"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Y:</label><draw-input draw-model="layerCurrent.layer.y" unit="px"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Width:</label><draw-input draw-model="layerCurrent.layer.width" unit="px"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Height:</label><draw-input draw-model="layerCurrent.layer.height" unit="px"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Stroke:</label><draw-input draw-model="layerCurrent.layer.stroke.width" unit="px"></draw-input>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Str Col:</label><button class="layer-color" ng-style="{background: layerCurrent.layer.stroke.color}" ng-click="showColors($event, layerCurrent.layer.stroke)"></button>
+            </div>
+          </div>
+          <div class="half-width-wrap">
+            <div class="half-width">
+              <label class="attr-label">Radius:</label><draw-input draw-model="layerCurrent.layer.radius" unit="px"></draw-input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-colors">
+      <div class="top-wrap">
+        <i class="back fa fa-arrow-left" ng-click="hideColors($event)"></i>
+      </div>
+      <div class="btn-group color-palette">
+      	<!-- {{ colorPalette.current.model }} -->
+        <label ng-repeat="color in colorPalette.palette" class="btn" ng-style="{background: '{{ color }}'}" ng-model="colorPalette.current.model.color" btn-radio="'{{ color }}'"></label>
+      </div>
+    </div>
+  </div>
+</div>
