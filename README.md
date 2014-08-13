@@ -7,11 +7,13 @@ This is a kick-butt app that uses SVG + AngularJS.
 ## Setup
 
 - Install Node.js
-- Add your SSH key to this repo
-- In terminal, initialize/start the node server:
-
+- Add your SSH key to this repo on GitHub
+- In terminal, clone the repo
 ```sh
 $ git clone git@github.com:timperkins/draw.git
+```
+- initialize/start the node server:
+```sh
 $ cd draw/server
 $ npm install
 $ node server.js
