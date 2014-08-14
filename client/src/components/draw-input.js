@@ -44,7 +44,9 @@ angular.module('components.draw-input', [])
 					var inputField = $($element).find('input'),
 						selected = false;
 
-					$(document).on('keydown.draw-input', function(e) {
+					$($element).on('keydown.draw-input', function(e) {
+						console.log('keydown.draw-input');
+						e.stopPropagation();
 						$scope.$apply(function() {
 							var code = e.which;
 							switch(code) {

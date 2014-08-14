@@ -99,6 +99,9 @@ angular.module('canvas', [
 					}
 					break;
 				case 'transform':
+					if(!$scope.layerCurrent.layer) {
+						return;
+					}
 					var side = '';
 					switch ($scope.state.action) {
 						case 'translating':

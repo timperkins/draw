@@ -18,24 +18,32 @@ angular.module('full-page', [
 			console.log('key: ', code);
 			switch(code) {
 				case 37: // left
-					$scope.$apply(function() {
-						$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x - 1;
-					});
+					if($scope.state == 'transform' && $scope.layerCurrent.layer) {
+						$scope.$apply(function() {
+							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x - 1;
+						});						
+					}
 					break;
 				case 38: // up
-					$scope.$apply(function() {
-						$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y - 1;
-					});
+					if($scope.state == 'transform' && $scope.layerCurrent.layer) {
+						$scope.$apply(function() {
+							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y - 1;
+						});
+					}
 					break;
 				case 39: // right
-					$scope.$apply(function() {
-						$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x + 1;
-					});
+					if($scope.state == 'transform' && $scope.layerCurrent.layer) {
+						$scope.$apply(function() {
+							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x + 1;
+						});
+					}
 					break;
 				case 40: // down
-					$scope.$apply(function() {
-						$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y + 1;
-					});
+					if($scope.state == 'transform' && $scope.layerCurrent.layer) {
+						$scope.$apply(function() {
+							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y + 1;
+						});
+					}
 					break;
 				case 84: // t
 					$scope.$apply(function() {
