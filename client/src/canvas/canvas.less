@@ -8,17 +8,19 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border: solid 1px #222;
+  overflow: scroll;
   .canvas {
-    display: block;
-    background: #fff;
-    width: 800px;
+    background: #333;
+    width: 3000px;
     height: 500px;
-    margin: 20px auto 0 auto;
+    position: absolute;
+    left: 0;
+    top: 0;
     &.draw {
       cursor: crosshair;
       .layer-outline {
         .outline.drawing {
-          stroke-width: 1;
+          stroke: rgba(0,0,0,1);
         }
       }
     }
@@ -26,7 +28,7 @@
       cursor: move;
 
       .layer-outline:hover .outline {
-        stroke-width: 1;
+        stroke: rgba(0,0,0,1);
       }
 
       .resize-line {
@@ -52,8 +54,8 @@
     }
     .layer-outline {
       .outline {
-        stroke-width: 0;
-        stroke: #000;
+        stroke-width: 1;
+        stroke: rgba(0,0,0,0);
         fill-opacity: 0;
       }      
     }

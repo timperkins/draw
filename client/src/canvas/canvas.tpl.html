@@ -1,6 +1,10 @@
-<div class="canvas-wrap" ng-controller="CanvasController">
+<!-- "oncontextmenu" disables right clicking in the canvas -->
+<div class="canvas-wrap" ng-controller="CanvasController" oncontextmenu="return false;">
   <svg 
-    class="canvas" 
+    class="canvas"
+    ng-style="{
+      width: canvasWidth()
+    }"
     ng-class="{
       draw: state.tool == 'rectangle', 
       transform: state.tool == 'transform',
@@ -11,7 +15,7 @@
     ng-mouseup="mouseUp($event)">
 
     
-
+    <draw-rect layer="background.layer"></draw-rect>
     <svg ng-repeat="layer in layers | reverse">
       <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
      <!--  <foreignObject ng-if="shape.type == 'text'" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}" ng-attr-width="{{ shape.getWidth() }}" ng-attr-height="{{ shape.getHeight() }}" ng-controller="ShapeCtrl" ng-class="{active: shape.active}">
@@ -31,6 +35,7 @@
       </foreignObject> -->
     </svg>
     <svg>
+      <draw-outline layer="background.layer" background="true"></draw-outline>
       <draw-outline ng-if="layerCurrent.layer" layer="layerCurrent.layer"></draw-outline>
     </svg> 
   </svg>

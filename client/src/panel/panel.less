@@ -24,10 +24,35 @@
       left: 0;
       bottom: 0;
       width: 200px;
+      padding-top: 20px;
       
       .btn-group-vertical.layer-layers {
         display: block;
-        padding-top: 20px;
+        &.background-layer {
+
+          .btn {
+            @bg-one: #404040;
+            @bg-two: #484848;
+            background: repeating-linear-gradient(
+              45deg,
+              @bg-one,
+              @bg-one 10px,
+              @bg-two 10px,
+              @bg-two 20px
+            );
+            &:hover {
+              @bg-one-hover: #424242;
+              @bg-two-hover: #4c4c4c;
+              background: repeating-linear-gradient(
+                45deg,
+                @bg-one-hover,
+                @bg-one-hover 10px,
+                @bg-two-hover 10px,
+                @bg-two-hover 20px
+              );
+            }
+          }      
+        }  
         .btn {
           padding: 0 5px;
           height: 30px;
@@ -90,7 +115,7 @@
             }
           }
         }
-      }    
+      } 
     }
     .top-wrap {
       margin: 0 5px 15px 10px;

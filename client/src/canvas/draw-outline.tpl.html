@@ -1,5 +1,5 @@
 <svg class="layer-outline">
-  <text ng-attr-x="{{ layer.x + layer.width + 20 }}" ng-attr-y="{{ layer.y + 10 }}" class="dimension-text" ng-show="layer.drawing">[{{ layer.width }} x {{ layer.height}}]</text>
+  <text ng-if="!background" ng-attr-x="{{ layer.x + layer.width + 20 }}" ng-attr-y="{{ layer.y + 10 }}" class="dimension-text" ng-show="layer.drawing">[{{ layer.width }} x {{ layer.height}}]</text>
   <rect 
     class="outline" ng-class="{drawing: layer.drawing}"
     ng-attr-x="{{ layer.x }}" 
@@ -7,6 +7,7 @@
     ng-attr-width="{{ layer.width }}" 
     ng-attr-height="{{ layer.height }}" />
   <line 
+    ng-if="!background"
     class="resize-line resize-line-n"
     ng-attr-x1="{{ layer.x }}" 
     ng-attr-x2="{{ layer.x + layer.width }}" 
@@ -14,6 +15,7 @@
     ng-attr-y2="{{ layer.y }}" 
     ng-mouseDown="layer.mouseDown($event, 'resizeLineN')" />
   <line 
+    ng-if="!background"
     class="resize-line resize-line-e"
     ng-attr-x1="{{ layer.x + layer.width }}" 
     ng-attr-x2="{{ layer.x + layer.width }}" 
@@ -21,6 +23,7 @@
     ng-attr-y2="{{ layer.y + layer.height }}" 
     ng-mouseDown="layer.mouseDown($event, 'resizeLineE')" />
   <line 
+    ng-if="!background"
     class="resize-line resize-line-s"
     ng-attr-x1="{{ layer.x }}" 
     ng-attr-x2="{{ layer.x + layer.width }}" 
@@ -28,6 +31,7 @@
     ng-attr-y2="{{ layer.y + layer.height }}"
     ng-mouseDown="layer.mouseDown($event, 'resizeLineS')" />
   <line 
+    ng-if="!background"
     class="resize-line resize-line-w"
     ng-attr-x1="{{ layer.x }}" 
     ng-attr-x2="{{ layer.x }}" 

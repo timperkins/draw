@@ -16,12 +16,15 @@ angular.module('services.layer', [
 			this.fillOpacity = 100;
 
 			angular.extend(this, data);
-			Layer.layers.push(this);
-			Layer.current.layer = this;
+			// Layer.layers.push(this);
+			// Layer.current.layer = this;
 		};
 		Layer.MIN_WIDTH = 2;
 		Layer.MIN_HEIGHT = 2;
 		Layer.layers = [];
+		Layer.background = {
+			layer: null
+		};
 		Layer.current = {
 			layer: null
 		};

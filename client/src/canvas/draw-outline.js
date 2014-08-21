@@ -5,7 +5,8 @@ angular.module('canvas.draw-outline', [])
 			templateUrl: 'canvas/draw-outline.tpl.html',
 			replace: true,
 			scope: {
-				layer: '='
+				layer: '=',
+				background: '=?'
 			},
 			link: function(scope) {
 				console.log('layer', scope.layer);

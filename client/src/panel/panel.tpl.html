@@ -14,6 +14,15 @@
           </div>
         </label>
       </div>
+      <div class="btn-group-vertical layer-layers background-layer">
+        <label class="btn" ng-click="layerClick(background.layer)">
+          <div class="clearfix">
+            <i class="thumbnail thumbnail-box" ng-style="{background: background.layer.color}"></i>
+            <p class="text">{{ background.layer.title }}</p>
+            <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, background.layer)"></i> 
+          </div>
+        </label>
+      </div>
     </div>
     <div class="panel-secondary">
       <div class="top-wrap">

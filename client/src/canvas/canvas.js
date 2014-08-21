@@ -27,10 +27,66 @@ angular.module('canvas', [
 		// $scope.state = drawFactory.state;
 		// // $scope.current = drawFactory.current;
 		$scope.colorPalette = colorPalette;
-		var layerOffset;
+		var CANVAS_OVERFLOW = 200,
+			layerOffset;
+
+		// Create the background layer 
+		$scope.background = Layer.background;
+		$scope.background.layer = new Rectangle({
+			x: CANVAS_OVERFLOW/2,
+			y: 50,
+			id: 99999,
+			title: 'Background',
+			type: 'rectangle',
+			color: '#fff',
+			width: 1100,
+			height: 500
+		});
+
+		
+
+		$scope.canvasWidth = function() {
+			var canvasWrapWidth = $($element).width(),
+				canvasWidth = $scope.background.layer.width + CANVAS_OVERFLOW;
+
+
+			if(canvasWrapWidth > canvasWidth) {
+				canvasWidth = canvasWrapWidth;
+			}
+
+			return canvasWidth; 
+		};
+
+		$scope.centerCanvas = function() {
+			var canvasWrap = $($element),
+				canvasWrapWidth = canvasWrap.width(),
+				canvasWrapHeight = canvasWrap.height(),
+				canvasWidth = $scope.background.layer.width + CANVAS_OVERFLOW,
+				canvasHeight = $scope.background.layer.height + CANVAS_OVERFLOW,
+				windowWidth = $(window).width(),
+				leftOffset = (canvasWidth - canvasWrapWidth) / 2;
+
+			canvasWrap.scrollLeft(leftOffset);
+		};
+
+		// Center the canvas
+		$scope.centerCanvas();
 
 		$scope.mouseDown = function(e) {
 			e.stopPropagation();
+
+			// Do nothing if right clicked
+			var rightClick;
+			e = e || window.event;
+			if("which" in e) { // webkit, firefox
+				rightClick = e.which == 3;
+			} else { // ie
+				rightClick = e.button == 2;
+			}
+			if(rightClick) {
+				return;
+			}
+
 			console.log('s', $scope.state.action);
 			switch ($scope.state.tool) {
 				case 'rectangle':
@@ -40,7 +96,7 @@ angular.module('canvas', [
 						$scope.state.action = 'drawing';
 						layerOffset = getLayerOffset(e.pageX, e.pageY);
 
-						new Rectangle({
+						var rect = new Rectangle({
 							x: layerOffset.x,
 							y: layerOffset.y,
 							id: layerId.toString(),
@@ -49,6 +105,21 @@ angular.module('canvas', [
 							color: colorPalette.color,
 							drawing: true
 						});
+
+						// Insert before the current layer
+						var insertIndex = 0;
+						for(var i=0; i<$scope.layers.length; i++) {
+							var layer = $scope.layers[i];
+							if(angular.equals(layer, $scope.layerCurrent.layer)) {
+								insertIndex = i;
+								break;
+							}
+						}
+
+						console.log('insertIndex', insertIndex);
+						$scope.layers.splice(insertIndex, 0, rect);
+						// $scope.layers.push(rect);
+						$scope.layerCurrent.layer = rect;
 					}
 					break;
 				case 'transform':
@@ -156,6 +227,8 @@ angular.module('canvas', [
 			});
 			return res;
 		};
+
+
 
 		function getLayerOffset(layerX, layerY) {
 			var canvasOffset = $('.canvas:first').offset();

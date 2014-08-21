@@ -8,6 +8,7 @@ angular.module('panel', [
   .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', 'state', function($scope, $element, colorPalette, Layer, state) {
 		$scope.layers = Layer.layers;
 		$scope.layerCurrent = Layer.current;
+		$scope.background = Layer.background;
 		$scope.state = state;
 		// $scope.drawFactory = drawFactory;
 		// $scope.drawFactory = {
