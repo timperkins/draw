@@ -3,13 +3,14 @@
   <svg 
     class="canvas"
     ng-style="{
-      width: canvasWidth()
+      width: canvasWidth(),
+      opacity: showCanvas ? 1 : 0
     }"
     ng-class="{
       draw: state.tool == 'rectangle', 
       transform: state.tool == 'transform',
       text: state.tool == 'text'
-    }" 
+    }"
     ng-mousedown="mouseDown($event)" 
     ng-mousemove="mouseMove($event)" 
     ng-mouseup="mouseUp($event)">

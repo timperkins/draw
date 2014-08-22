@@ -19,11 +19,12 @@ angular.module('canvas', [
 		};
 	})
 // .controller('CanvasController', function($scope, $element, $attrs, drawFactory, colorPalette, font, Layer) {
-.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Layer', 'state',
-	function($scope, $element, colorPalette, Rectangle, Layer, state) {
+.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Layer', 'state', '$timeout',
+	function($scope, $element, colorPalette, Rectangle, Layer, state, $timeout) {
 		$scope.state = state;
 		$scope.layers = Layer.layers;
 		$scope.layerCurrent = Layer.current;
+		$scope.showCanvas = false;
 		// $scope.state = drawFactory.state;
 		// // $scope.current = drawFactory.current;
 		$scope.colorPalette = colorPalette;
@@ -57,20 +58,28 @@ angular.module('canvas', [
 			return canvasWidth; 
 		};
 
-		$scope.centerCanvas = function() {
-			var canvasWrap = $($element),
-				canvasWrapWidth = canvasWrap.width(),
-				canvasWrapHeight = canvasWrap.height(),
-				canvasWidth = $scope.background.layer.width + CANVAS_OVERFLOW,
-				canvasHeight = $scope.background.layer.height + CANVAS_OVERFLOW,
-				windowWidth = $(window).width(),
-				leftOffset = (canvasWidth - canvasWrapWidth) / 2;
+		$scope.centerCanvas = function(callback) {
+			$timeout(function() {
+				var canvasWrap = $($element),
+					canvasWrapWidth = canvasWrap.width(),
+					canvasWrapHeight = canvasWrap.height(),
+					canvasWidth = $scope.background.layer.width + CANVAS_OVERFLOW,
+					canvasHeight = $scope.background.layer.height + CANVAS_OVERFLOW,
+					windowWidth = $(window).width(),
+					leftOffset = (canvasWidth - canvasWrapWidth) / 2;
+					console.log('lo', leftOffset, canvasWidth, canvasWrapWidth);
+					console.log('cw', canvasWrap);
+				canvasWrap.scrollLeft(leftOffset);
 
-			canvasWrap.scrollLeft(leftOffset);
+				callback();
+			});
 		};
 
 		// Center the canvas
-		$scope.centerCanvas();
+		$scope.centerCanvas(function() {
+			// Show the canvas
+			$scope.showCanvas = true;
+		});
 
 		$scope.mouseDown = function(e) {
 			e.stopPropagation();
