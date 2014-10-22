@@ -18,30 +18,38 @@ angular.module('full-page', [
 			console.log('key: ', code);
 			switch(code) {
 				case 37: // left
+					e.preventDefault();
 					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x - 1;
+							$scope.layerCurrent.layer.save();
 						});						
 					}
 					break;
 				case 38: // up
+					e.preventDefault();
 					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y - 1;
+							$scope.layerCurrent.layer.save();
 						});
 					}
 					break;
 				case 39: // right
+					e.preventDefault();
 					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x + 1;
+							$scope.layerCurrent.layer.save();
 						});
 					}
 					break;
 				case 40: // down
+					e.preventDefault();
 					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y + 1;
+							$scope.layerCurrent.layer.save();
 						});
 					}
 					break;

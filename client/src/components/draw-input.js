@@ -5,7 +5,8 @@ angular.module('components.draw-input', [])
 			templateUrl: 'components/draw-input.tpl.html',
 			scope: {
 				drawModel: '=',
-				unit: '@'
+				unit: '@',
+				onBlur: '&'
 			},
 			replace: true,
 			controller: function($scope, $element, $attrs) {
@@ -17,7 +18,7 @@ angular.module('components.draw-input', [])
 						return;
 					}
 					if(typeof $scope.drawModel !== 'undefined') {
-						curDrawModel = $scope.drawModel;
+						curDrawModel = Math.abs($scope.drawModel);
 						$scope.tempModel = curDrawModel + ' ' + $scope.unit;
 						// initialized = true;
 					}
@@ -39,6 +40,9 @@ angular.module('components.draw-input', [])
 					console.log('blurred', $scope.tempModel);
 
 					$(document).off('keydown.draw-input');
+
+					// Run the onBlur function
+					$scope.onBlur();
 				};
 				$scope.focus = function(e) {
 					var inputField = $($element).find('input'),

@@ -1,11 +1,11 @@
-<div class="panel-wrap" ng-controller="PanelController">
+<div class="panel-wrap" ng-class="{'sorting': sorting}" ng-controller="PanelController">
   <div class="panel" ng-class="{
         secondary: state.panel == 'secondary',
         colors: state.panel == 'colors'
       }">
     <div class="panel-main">
-      <div class="btn-group-vertical layer-layers" ui-sortable ng-model="layers">
-        <label class="btn" ng-repeat="layer in layers" ng-model="layerCurrent.layer" btn-radio="layer" ng-click="layerClick(layer)">
+      <div class="btn-group-vertical layer-layers" ui-sortable="sortableOptions" ng-model="layers">
+        <label class="btn" ng-repeat="layer in layers" ng-model="layerCurrent.layer" btn-radio="layer" ng-click="layerCurrent.index = $index">
           <div class="clearfix">
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'text'" class="thumbnail thumbnail-text fa fa-font" ng-style="{color: '{{ colorPalette.color }}'}"></i>
@@ -23,6 +23,15 @@
           </div>
         </label>
       </div>
+      <div class="bottom-buttons-wrap">
+        <div class="bottom-buttons">
+          <i class="fa fa-trash trash" ng-class="{
+            'hover': overTrash,
+            'active': sorting
+          }"></i>
+          <i class="fa fa-folder active"></i>
+        </div>
+      </div>
     </div>
     <div class="panel-secondary">
       <div class="top-wrap">
@@ -36,7 +45,7 @@
         <div class="half-width-outer">
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Opacity:</label><draw-input draw-model="layerCurrent.layer.fillOpacity" unit="%"></draw-input>
+              <label class="attr-label">Opacity:</label><draw-input draw-model="layerCurrent.layer.fillOpacity" unit="%" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
@@ -46,27 +55,27 @@
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">X:</label><draw-input draw-model="layerCurrent.layer.x" unit="px"></draw-input>
+              <label class="attr-label">X:</label><draw-input draw-model="layerCurrent.layer.x" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Y:</label><draw-input draw-model="layerCurrent.layer.y" unit="px"></draw-input>
+              <label class="attr-label">Y:</label><draw-input draw-model="layerCurrent.layer.y" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Width:</label><draw-input draw-model="layerCurrent.layer.width" unit="px"></draw-input>
+              <label class="attr-label">Width:</label><draw-input draw-model="layerCurrent.layer.width" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Height:</label><draw-input draw-model="layerCurrent.layer.height" unit="px"></draw-input>
+              <label class="attr-label">Height:</label><draw-input draw-model="layerCurrent.layer.height" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Stroke:</label><draw-input draw-model="layerCurrent.layer.stroke.width" unit="px"></draw-input>
+              <label class="attr-label">Stroke:</label><draw-input draw-model="layerCurrent.layer.stroke.width" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
           <div class="half-width-wrap">
@@ -76,7 +85,7 @@
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Radius:</label><draw-input draw-model="layerCurrent.layer.radius" unit="px"></draw-input>
+              <label class="attr-label">Radius:</label><draw-input draw-model="layerCurrent.layer.radius" unit="px" on-blur="layerCurrent.layer.save()"></draw-input>
             </div>
           </div>
         </div>
@@ -84,7 +93,7 @@
     </div>
     <div class="panel-colors">
       <div class="top-wrap">
-        <i class="back fa fa-arrow-left" ng-click="hideColors($event)"></i>
+        <i class="back fa fa-arrow-left" ng-click="hideColors($event); layerCurrent.layer.save()"></i>
       </div>
       <div class="btn-group color-palette">
       	<!-- {{ colorPalette.current.model }} -->

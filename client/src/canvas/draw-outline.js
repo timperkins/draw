@@ -9,7 +9,7 @@ angular.module('canvas.draw-outline', [])
 				background: '=?'
 			},
 			link: function(scope) {
-				console.log('layer', scope.layer);
+				// console.log('layer', scope.layer);
 			}
 		};
 	});

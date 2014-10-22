@@ -5,6 +5,9 @@
 	bottom: 0;
 	width: 200px;
   overflow: hidden;
+  &.sorting {
+    overflow: visible;
+  }
   .panel {
     position: absolute;
     top: 0;
@@ -69,9 +72,10 @@
           &:hover {
             background: #515151;
           }
+          &:active {
+            // background: #3c3c3c;
+          }
           &.active {
-            box-shadow: none;
-            -webkit-box-shadow: none;
             border-color: #666;
             background: #333;
           }
@@ -116,7 +120,8 @@
             }
           }
         }
-      } 
+      }
+      
     }
     .top-wrap {
       margin: 0 5px 15px 10px;
@@ -214,5 +219,39 @@
         }
       }
     }
+  }
+  .bottom-buttons-wrap {
+    position: absolute;
+    bottom: 0;
+    // height: 20px;
+    width: 100%;
+    border-top: solid 1px #888;
+    .bottom-buttons {
+      padding: 0 10px;
+      .fa {
+        color: #bbb;
+        font-size: 18px;
+        padding: 10px;
+        &.hover {
+          background: red;
+        }
+        &.active {
+          color: #fff;
+        }
+      }      
+    }
+
+  }
+  &.sorting {
+    .panel .panel-main {
+      .btn-group-vertical.layer-layers {
+        .btn {
+          .edit-layer {
+            display: none;
+          }
+        }      
+      }      
+    }
+
   }
 }

@@ -1,15 +1,34 @@
-var http = require('http');
-var express = require('express');
-var path = require('path');
-var config = {
-  listenPort: 3000,
-  distFolder: path.resolve(__dirname, '../client/build'),
-  staticUrl: '/static',
-}
+var http = require('http'),
+	express = require('express'),
+	path = require('path'),
+	config = {
+	  listenPort: 3000,
+	  distFolder: path.resolve(__dirname, '../client/build'),
+	  staticUrl: '/static',
+	},
+	app = express(),
+	bodyParser = require('body-parser'),
+	server = http.createServer(app),
+	buildFolder = path.resolve(__dirname, '../client/build'),
+	storage = require('./storage');
 
-var app = express();
-var server = http.createServer(app);
-var buildFolder = path.resolve(__dirname, '../client/build');
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+
+storage.addCollection(app, {
+	endpoint: 'shape',
+	collection: 'shapes',
+	fields: ['width', 'height', 'x', 'y', 'color', 'fillOpacity', 'radius', 'title', 'type', 'prev'] // missing stroke.color and stroke.width (cannot contain ".")
+});
+
+
+
+// a middleware with no mount path; gets executed for every request to the app
+app.use(function (req, res, next) {
+  console.log('Time:', Date.now());
+  next();
+});
+
+
 app.use('/static/', express.static(buildFolder));
 
 app.all('/*', function(req, res) {

@@ -3,22 +3,22 @@
   <svg 
     class="canvas"
     ng-style="{
-      width: canvasWidth(),
+      width: canvasWidth,
+      height: canvasHeight,
       opacity: showCanvas ? 1 : 0
     }"
     ng-class="{
-      draw: state.tool == 'rectangle', 
+      draw: state.tool == 'rectangle' || state.tool == 'oval', 
       transform: state.tool == 'transform',
       text: state.tool == 'text'
     }"
     ng-mousedown="mouseDown($event)" 
     ng-mousemove="mouseMove($event)" 
     ng-mouseup="mouseUp($event)">
-
-    
     <draw-rect layer="background.layer"></draw-rect>
     <svg ng-repeat="layer in layers | reverse">
       <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
+      <draw-oval ng-if="layer.type == 'oval'" layer="layer"></draw-oval>
      <!--  <foreignObject ng-if="shape.type == 'text'" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}" ng-attr-width="{{ shape.getWidth() }}" ng-attr-height="{{ shape.getHeight() }}" ng-controller="ShapeCtrl" ng-class="{active: shape.active}">
         <textarea 
           class="svg-text" 
