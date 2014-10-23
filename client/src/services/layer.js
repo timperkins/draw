@@ -71,6 +71,19 @@ angular.module('services.layer', [
 				console.log('error on findAll', data);
 			});
 		};
+		Layer.relink = function() {
+			var curPrev = null;
+			
+			for (var i=0; i<Layer.layers.length; i++) {
+				var curLayer = Layer.layers[i];
+
+				if (curLayer.prev != curPrev) {
+					curLayer.prev = curPrev;
+					curLayer.save();
+				}
+				curPrev = curLayer.id;
+			}
+		};
 
 		// Instance methods 
 		Layer.prototype.create = function() {
@@ -123,9 +136,27 @@ angular.module('services.layer', [
 		};
 		Layer.prototype.delete = function() {
 			var self = this, 
-				removeIndex = Layer.layers.indexOf(self);
+				removeIndex = Layer.layers.indexOf(self),
+				newPrev = self.prev,
+				nextLayer = Layer.layers[removeIndex+1];
+
+			if (nextLayer) {
+				nextLayer.prev = newPrev;
+				nextLayer.save();
+			}
 
 			Layer.layers.splice(removeIndex, 1);
+			// var newLayers = [];
+			// for (var i=0; i<Layer.layers.length; i++) {
+			// 	if (i != removeIndex) {
+			// 		console.log('la', Layer.layers[i].title);
+			// 		newLayers.push(Layer.layers[i]);
+			// 	}
+			// }
+			// console.log('n', newLayers);
+			// Layer.layers.length = 0;
+			// angular.extend(Layer.layers, newLayers);
+			// // console.log('after layers', Layer.layers);
 
 			// Update the new current layer
 			if (self == Layer.current.layer) {
@@ -135,8 +166,15 @@ angular.module('services.layer', [
 					Layer.current.layer = Layer.layers[0];
 				}
 			}
+
+			// console.log('before layers', Layer.layers);
+			console.log('about to delete', self);
+
 			$http.delete('/shape/' + self.id).success(function(data) {
 				// delete success
+				
+				
+
 			}).error(function(data) {
 				console.log('delete error', data);
 			});
@@ -194,6 +232,7 @@ angular.module('services.layer', [
 			e.stopPropagation();
 			var self = this;
 			state.action = action;
+			self.drawing = true;
 
 			switch (action) {
 				case 'resizeLineN':

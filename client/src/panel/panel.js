@@ -5,7 +5,7 @@ angular.module('panel', [
 		'components.draw-input',
 		'ui.sortable'
 	])
-  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', 'state', function($scope, $element, colorPalette, Layer, state) {
+  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', 'state', '$timeout', function($scope, $element, colorPalette, Layer, state, $timeout) {
 		$scope.layers = Layer.layers;
 		$scope.layerCurrent = Layer.current;
 		$scope.background = Layer.background;
@@ -42,6 +42,7 @@ angular.module('panel', [
 		
 
 		// Update the linked list when a layer is repositioned
+		var deleted = false;
 		$scope.sortableOptions = {
 			// start: function(e, ui) {
 			// 	ui.item.startPos = ui.item.index();
@@ -53,40 +54,55 @@ angular.module('panel', [
 				ui.item.startPos = ui.item.index();
 			},
 			update: function(e, ui) {
-				// console.log('up');
+				console.log('up', e, ui);
 				// console.log('top of update');
 				$(document).off('.panelSorting');
 				if ($scope.overTrash) {
-					$scope.$apply(function() {
-						$scope.overTrash = false;
-						// console.log('update');
+					// ui.item.remove();
+					console.log('cancel from update');
+					ui.item.sortable.cancel();
+					// ui.item.remove();
+					deleted = true;
+					$scope.overTrash = false;
+					$timeout(function() {
+						
 						Layer.layers[ui.item.startPos].delete();
-					});	
+						
+					}, 10);	
 				}
 			},
+			// beforeStop: function (event, ui) {
+			// 	if(removeIntent == true){
+			// 		ui.item.remove();   
+			// 	}
+			// }
 			stop: function(e, ui) {
 				// console.log('stop');
 				// Call this in case update doesn't fire first (not sure why)
 				if ($scope.overTrash) {
-					$scope.$apply(function() {
-						$scope.overTrash = false;
+					// ui.item.remove();
+					ui.item.sortable.cancel();
+					// ui.item.remove();
+					deleted = true;
+					$scope.overTrash = false;
+					$timeout(function() {
+						
 						Layer.layers[ui.item.startPos].delete();
-					});
+						
+
+					}, 10);
 				}
 
 				$scope.sorting = false;
+				if (deleted) {
+					deleted = false;
+					return;
+				}
 
 				$scope.$apply(function() {
-					var curPrev = null;
-					for (var i=0; i<Layer.layers.length; i++) {
-						var curLayer = Layer.layers[i];
+					console.log('relink');
+					Layer.relink();
 
-						if (curLayer.prev != curPrev) {
-							curLayer.prev = curPrev;
-							curLayer.save();
-						}
-						curPrev = curLayer.id;
-					}
 				});
 				// var currentLayer = Layer.current.layer,
 				// 	startPos = ui.item.startPos,
