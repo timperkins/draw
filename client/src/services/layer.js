@@ -284,12 +284,13 @@ angular.module('services.layer', [
 			if(self.y > self.endY) {
 				self.y = self.endY;
 			}
+			// Make the width and height are positive
+			self.width = Math.abs(self.width);
+			self.height = Math.abs(self.height);
 
 			// We don't need the endpoints any more
 			delete(self.endX);
 			delete(self.endY);
-
-			self.save();
 		};
 
 		// This function accepts the current mouse coordinates.

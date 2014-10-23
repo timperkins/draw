@@ -250,11 +250,13 @@ angular.module('canvas', [
 					if ($scope.state.action == 'drawing') {
 						// $scope.layerCurrent.layer.drawing = false;
 						$scope.layerCurrent.layer.endDrawing();
+						$scope.layerCurrent.layer.save();
 					}
 					break;
 				case 'transform':
+					$scope.layerCurrent.layer.drawing = false;
 					if ($scope.state.action == 'translating') {
-						$scope.layerCurrent.layer.drawing = false;
+						// $scope.layerCurrent.layer.drawing = false;
 						// $scope.state.action = '';
 					}
 					break;
