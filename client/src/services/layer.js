@@ -186,46 +186,72 @@ angular.module('services.layer', [
 			this.y = newY - this.offset.y;
 			// console.log('this x y', this.x, this.y);
 			// _.debounce(this.$save, 1000, true);
-			this.save();
+			// this.save();
 		};
 		Layer.prototype.resizeLine = function(location, newX, newY) {
-			switch (location) {
-				case 'n':
-					if (newY < this.bottomY) {
-						this.y = newY;
-						this.height = this.bottomY - newY;
-					} else {
-						this.y = this.bottomY;
-						this.height = newY - this.bottomY;
-					}
-					break;
-				case 'e':
-					if (newX > this.leftX) {
-						this.x = this.leftX;
-						this.width = newX - this.leftX;
-					} else {
-						this.x = newX;
-						this.width = this.leftX - newX;
-					}
-					break;
-				case 's':
-					if (newY > this.topY) {
-						this.y = this.topY;
-						this.height = newY - this.topY;
-					} else {
-						this.y = newY;
-						this.height = this.topY - newY;
-					}
-					break;
-				case 'w':
-					if (newX < this.rightX) {
-						this.x = newX;
-						this.width = this.rightX - newX;
-					} else {
-						this.x = this.rightX;
-						this.width = newX - this.rightX;
-					}
-					break;
+			if (!angular.isArray(location)) {
+				location = [location];
+			}
+
+			for (var i=0; i<location.length; i++) {
+				var loc = location[i];
+
+				switch (loc) {
+					case 'n':
+						if (newY < this.bottomY) {
+							this.y = newY;
+							this.height = this.bottomY - newY;
+						} else {
+							this.y = this.bottomY;
+							this.height = newY - this.bottomY;
+						}
+						break;
+					case 'e':
+						if (newX > this.leftX) {
+							this.x = this.leftX;
+							this.width = newX - this.leftX;
+						} else {
+							this.x = newX;
+							this.width = this.leftX - newX;
+						}
+						break;
+					case 's':
+						if (newY > this.topY) {
+							this.y = this.topY;
+							this.height = newY - this.topY;
+						} else {
+							this.y = newY;
+							this.height = this.topY - newY;
+						}
+						break;
+					case 'w':
+						if (newX < this.rightX) {
+							this.x = newX;
+							this.width = this.rightX - newX;
+						} else {
+							this.x = this.rightX;
+							this.width = newX - this.rightX;
+						}
+						break;
+					// case 'nw':
+					// 	// north
+					// 	if (newY < this.bottomY) {
+					// 		this.y = newY;
+					// 		this.height = this.bottomY - newY;
+					// 	} else {
+					// 		this.y = this.bottomY;
+					// 		this.height = newY - this.bottomY;
+					// 	}
+					// 	// west
+					// 	if (newX < this.rightX) {
+					// 		this.x = newX;
+					// 		this.width = this.rightX - newX;
+					// 	} else {
+					// 		this.x = this.rightX;
+					// 		this.width = newX - this.rightX;
+					// 	}
+					// 	break;
+				}
 			}
 		};
 		Layer.prototype.mouseDown = function(e, action) {
@@ -247,14 +273,36 @@ angular.module('services.layer', [
 				case 'resizeLineW':
 					self.rightX = self.x + self.width;
 					break;
+				case 'resizeLineNW':
+					self.bottomY = self.y + self.height;
+					self.rightX = self.x + self.width;
+					break;
+				case 'resizeLineNE':
+					self.bottomY = self.y + self.height;
+					self.leftX = self.x;
+					break;
+				case 'resizeLineSE':
+					self.topY = self.y;
+					self.leftX = self.x;
+					break;
+				case 'resizeLineSW':
+					self.topY = self.y;
+					self.rightX = self.x + self.width;
+					break;
 			}
 		};
 
 		Layer.prototype.getWidth = function() {
+			if (Math.abs(this.width) < Layer.MIN_WIDTH) {
+				return Layer.MIN_WIDTH;
+			}
 			return Math.abs(this.width);
 		};
 
 		Layer.prototype.getHeight = function() {
+			if (Math.abs(this.height) < Layer.MIN_HEIGHT) {
+				return Layer.MIN_HEIGHT;
+			}
 			return Math.abs(this.height);
 		};
 

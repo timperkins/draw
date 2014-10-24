@@ -17,16 +17,26 @@
     &.draw {
       cursor: crosshair;
       .layer-outline {
-        .outline.drawing {
-          stroke: rgba(0,0,0,1);
+        .outline {
+          &.drawing {
+            stroke: rgba(0,0,0,1);
+
+          }
+
         }
       }
     }
     &.transform {
       cursor: move;
 
-      .layer-outline:hover .outline {
-        stroke: rgba(0,0,0,1);
+      .layer-outline:hover {
+        .outline {
+          stroke: rgba(0,0,0,1);
+          &.fill {
+            fill: #fff;
+            fill-opacity: 1;
+          }
+        }
       }
 
       .resize-line {
@@ -43,6 +53,20 @@
         }
         &.resize-line-w {
           cursor: w-resize;
+        }
+      }
+      .resize-diagonal {
+        &.resize-diagonal-nw {
+          cursor: nw-resize;
+        }
+        &.resize-diagonal-ne {
+          cursor: ne-resize;
+        }
+        &.resize-diagonal-se {
+          cursor: se-resize;
+        }
+        &.resize-diagonal-sw {
+          cursor: sw-resize;
         }
       }        
 

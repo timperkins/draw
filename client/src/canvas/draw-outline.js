@@ -9,7 +9,7 @@ angular.module('canvas.draw-outline', [])
 				background: '=?'
 			},
 			link: function(scope) {
-				// console.log('layer', scope.layer);
+				scope.DIAGONAL_BOX_SIZE = 6;
 			}
 		};
 	});

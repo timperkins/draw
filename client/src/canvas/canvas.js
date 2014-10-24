@@ -235,6 +235,18 @@ angular.module('canvas', [
 						case 'resizeLineW':
 							side = 'w';
 							break;
+						case 'resizeLineNW':
+							side = ['n', 'w'];
+							break;
+						case 'resizeLineNE':
+							side = ['n', 'e'];
+							break;
+						case 'resizeLineSE':
+							side = ['s', 'e'];
+							break;
+						case 'resizeLineSW':
+							side = ['s', 'w'];
+							break;
 					}
 					$scope.layerCurrent.layer.resizeLine(side, e.offsetX, e.offsetY);
 					break;
@@ -255,6 +267,7 @@ angular.module('canvas', [
 					break;
 				case 'transform':
 					$scope.layerCurrent.layer.drawing = false;
+					$scope.layerCurrent.layer.save();
 					if ($scope.state.action == 'translating') {
 						// $scope.layerCurrent.layer.drawing = false;
 						// $scope.state.action = '';
