@@ -1,6 +1,6 @@
 <div class="header-wrap" ng-controller="HeaderController">
 	<h1>Draw</h1>
-	<button class="active-color" ng-style="{background: colorPalette.color}" ng-click="showColors($event, colorPalette)"></button>
+	<button class="active-color" ng-style="{background: colorPalette.color}" ng-click="panel.showPanel('colors', 'right', 'layers')"></button>
 	<span class="save-state">{{ state.saveState }}</span>
 	<!-- <div class="font-size-wrap" ng-if="state.tool == 'text'">
 	  <input type="text" class="font-size-input" ng-model="current.shape.font.size" /><div class="btn-group font-size-dropdown" dropdown>

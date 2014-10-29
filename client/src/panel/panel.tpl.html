@@ -1,16 +1,36 @@
 <div class="panel-wrap" ng-class="{'sorting': sorting}" ng-controller="PanelController">
-  <div class="panel" ng-class="{
-        secondary: state.panel == 'secondary',
-        colors: state.panel == 'colors'
-      }">
-    <div class="panel-main">
+  <div class="panel">
+    <div ng-class="{
+      'active': panel.panelActive == 'drawings',
+      'transition': panel.panelTransition,
+      'staging-right': panel.panelStagingRight == 'drawings',
+      'staging-left': panel.panelStagingLeft == 'drawings'
+    }">
+      <h2>Drawings list</h2>
+      <button ng-click="panel.showPanel('layers', 'right')">back >></button>
+    </div>  
+    <div class="panel-main" ng-class="{
+      'active': panel.panelActive == 'layers',
+      'transition': panel.panelTransition,
+      'staging-right': panel.panelStagingRight == 'layers',
+      'staging-left': panel.panelStagingLeft == 'layers'
+    }">
+      <div class="top-wrap main">
+        <i class="back fa fa-arrow-left" ng-click="panel.showPanel('drawings', 'left')"></i> <h2 class="panel-title">Edit Drawing</h2>
+      </div>
+      <!-- <h2 class="drawing-title">Untitled Drawing</h2> -->
+      <div class="title-edit-wrap slim">
+       <input type="text" class="input-dark title-edit main-title" ng-model="Drawing.current.title" ng-blur="Drawing.current.save()" />
+      </div>
       <div class="btn-group-vertical layer-layers" ui-sortable="sortableOptions" ng-model="layers">
         <label class="btn" ng-repeat="layer in layers" ng-model="layerCurrent.layer" btn-radio="layer" ng-click="layerCurrent.index = $index">
           <div class="clearfix">
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
+            <i ng-if="layer.type == 'oval'" class="thumbnail thumbnail-box thumbnail-oval" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'text'" class="thumbnail thumbnail-text fa fa-font" ng-style="{color: '{{ colorPalette.color }}'}"></i>
             <p class="text">{{ layer.title }}</p>
-            <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, layer)"></i> 
+            <!-- <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, layer)"></i>  -->
+            <i class="edit-layer fa fa-pencil" ng-click="panel.showPanel('layerDetail', 'right')"></i>
           </div>
         </label>
       </div>
@@ -19,7 +39,8 @@
           <div class="clearfix">
             <i class="thumbnail thumbnail-box" ng-style="{background: background.layer.color}"></i>
             <p class="text">{{ background.layer.title }}</p>
-            <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, background.layer)"></i> 
+            <!-- <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, background.layer)"></i>  -->
+            <i class="edit-layer fa fa-pencil" ng-click="panel.showPanel('layerDetail', 'right')"></i> 
           </div>
         </label>
       </div>
@@ -33,12 +54,18 @@
         </div>
       </div>
     </div>
-    <div class="panel-secondary">
+    <div class="panel-secondary" ng-class="{
+      'active': panel.panelActive == 'layerDetail',
+      'transition': panel.panelTransition,
+      'staging-right': panel.panelStagingRight == 'layerDetail',
+      'staging-left': panel.panelStagingLeft == 'layerDetail'
+    }">
       <div class="top-wrap">
-        <i class="back fa fa-arrow-left" ng-click="hideSecondary($event)"></i>
+        <!-- <i class="back fa fa-arrow-left" ng-click="hideSecondary($event)"></i> -->
+        <i class="back fa fa-arrow-left" ng-click="panel.showPanel('layers', 'left')"></i> <h2 class="panel-title">Edit Layer</h2>
       </div>
       <div class="title-edit-wrap">
-        <input type="text" class="input-dark title-edit" ng-model="layerCurrent.layer.title" />
+        <input type="text" class="input-dark title-edit" ng-model="layerCurrent.layer.title" ng-blur="layerCurrent.layer.save()" />
         <br><br>
       </div>
       <div class="attr-detail">
@@ -50,7 +77,7 @@
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-            <label class="attr-label">Color:</label><button class="layer-color" ng-style="{background: layerCurrent.layer.color}" ng-click="showColors($event, layerCurrent.layer)"></button>
+            <label class="attr-label">Color:</label><button class="layer-color" ng-style="{background: layerCurrent.layer.color}" ng-click="panel.showPanel('colors', 'right'); colorPalette.current.model = layerCurrent.layer"></button>
             </div>
           </div>
           <div class="half-width-wrap">
@@ -91,9 +118,14 @@
         </div>
       </div>
     </div>
-    <div class="panel-colors">
+    <div class="panel-colors" ng-class="{
+      'active': panel.panelActive == 'colors',
+      'transition': panel.panelTransition,
+      'staging-right': panel.panelStagingRight == 'colors',
+      'staging-left': panel.panelStagingLeft == 'colors'
+    }">
       <div class="top-wrap">
-        <i class="back fa fa-arrow-left" ng-click="hideColors($event); layerCurrent.layer.save()"></i>
+        <i class="back fa fa-arrow-left" ng-click="panel.showPanel('layerDetail', 'left'); layerCurrent.layer.save()"></i>  <h2 class="panel-title">Edit Color</h2>
       </div>
       <div class="btn-group color-palette">
       	<!-- {{ colorPalette.current.model }} -->

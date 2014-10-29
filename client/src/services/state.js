@@ -5,7 +5,6 @@ angular.module('services.state', [
 		return {
 			tool: 'transform',
 			action: '',
-			panel: 'default',
 			saveState: defaults.saveState
 		};
 	}]);

@@ -1,10 +1,12 @@
 angular.module('header', [
 		'services.color-palette',
-		'services.state'
+		'services.state',
+		'services.panel'
 	])
-	.controller('HeaderController', ['$scope', 'colorPalette', 'state', function($scope, colorPalette, state) {
+	.controller('HeaderController', ['$scope', 'colorPalette', 'state', 'panel', function($scope, colorPalette, state, panel) {
 		$scope.colorPalette = colorPalette;
 		$scope.state = state;
+		$scope.panel = panel;
 		// $scope.shapes = drawFactory.shapes;
 		// $scope.activeShapes = drawFactory.activeShapes()[0];
 		// $scope.font = drawFactory.font;
@@ -15,15 +17,15 @@ angular.module('header', [
 		// 	isOpen: false
 		// };
 
-		$scope.showColors = function(e, model) {
-			state.panel = 'colors';
-			colorPalette.current.model = model;
+		// $scope.showColors = function(e, model) {
+		// 	state.panel = 'colors';
+		// 	colorPalette.current.model = model;
 
-			// Focus on the title input field
-			// setTimeout(function() {
-			// 	$($element).find('.title-edit:first').focus();
-			// }, 500);
-		};
+		// 	// Focus on the title input field
+		// 	// setTimeout(function() {
+		// 	// 	$($element).find('.title-edit:first').focus();
+		// 	// }, 500);
+		// };
 
 		// $scope.fontSizeClick = function(e, size) {
 		// 	// e.stopPropagation();

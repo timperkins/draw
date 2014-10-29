@@ -1,23 +1,31 @@
 angular.module('panel', [
 		'services.color-palette',
 		'services.layer',
-		'services.state',
+		'services.drawing',
+		'services.defaults',
+		'services.panel',
 		'components.draw-input',
 		'ui.sortable'
 	])
-  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', 'state', '$timeout', function($scope, $element, colorPalette, Layer, state, $timeout) {
+  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', '$timeout', 'Drawing', 'defaults', 'panel', function($scope, $element, colorPalette, Layer, $timeout, Drawing, defaults, panel) {
+
+
+		$scope.Drawing = Drawing;
 		$scope.layers = Layer.layers;
 		$scope.layerCurrent = Layer.current;
 		$scope.background = Layer.background;
-		$scope.state = state;
 		$scope.sorting = false;
 		$scope.overTrash = false;
+		$scope.colorPalette = colorPalette;
+		$scope.panel = panel;
+		// $scope.drawing = Drawing.current;
+		// console.log('d', Drawing.current);
 		// $scope.drawFactory = drawFactory;
 		// $scope.drawFactory = {
 		//	model: ''
 		// };
 
-		$scope.panel = 'default';
+		// $scope.panel = 'default';
 
 		$scope.$watch('sorting', function(newVal, oldVal) {
 			if (newVal) {
@@ -144,39 +152,72 @@ angular.module('panel', [
 			}
 		}
 
-		$scope.showSecondary = function(e, layer) {
-			// e.stopPropagation();
-			$scope.layerCurrent.layer = layer;
-			$scope.state.panel = 'secondary';
+		// $scope.showPanel = function(panel, direction) {
+		// 	if (direction == 'right') {
+		// 		state.panelStagingRight = panel;
+		// 	} else {
+		// 		state.panelStagingLeft = panel;
+		// 	}
+			
+		// 	// The transition needs to run after the new panel has been staged
+		// 	state.panelTransition = false;
+		// 	$timeout(function() {
+		// 		state.panelTransition = true;
+		// 		$timeout(function() {
+		// 			var oldPanel = state.panelActive;
 
-			// Focus on the title input field
-			setTimeout(function() {
-				$($element).find('.title-edit:first').focus();	
-			}, 500);
-		};
+		// 			// Move 
+		// 			if (direction == 'left') {
+		// 				state.panelStagingRight = oldPanel;
+		// 				state.panelStagingLeft = '';
+		// 			} else {
+		// 				state.panelStagingLeft = oldPanel;
+		// 				state.panelStagingRight = '';
+		// 			}
+		// 			state.panelActive = panel;
+		// 			$timeout(function() {
+		// 				state.panelTransition = false;
+		// 				state.panelStagingRight = '';
+		// 				state.panelStagingLeft = '';
+		// 			}, 400);
+		// 		}, 50);
+		// 	}, 50);
 
-		$scope.hideSecondary = function(e) {
-			e.stopPropagation();
-			$scope.state.panel = 'default';
-		};
+		// };
 
-		$scope.showColors = function(e, model) {
-			// e.stopPropagation();
-			// console.log(layer);
-			// $scope.layerCurrent.layer = layer;
-			$scope.state.panel = 'colors';
+		// $scope.showSecondary = function(e, layer) {
+		// 	// e.stopPropagation();
+		// 	$scope.layerCurrent.layer = layer;
+		// 	$scope.state.panel = 'secondary';
+
+		// 	// Focus on the title input field
+		// 	setTimeout(function() {
+		// 		$($element).find('.title-edit:first').focus();	
+		// 	}, 500);
+		// };
+
+		// $scope.hideSecondary = function(e) {
+		// 	e.stopPropagation();
+		// 	$scope.state.panel = 'default';
+		// };
+
+		// $scope.showColors = function(e, model) {
+		// 	// e.stopPropagation();
+		// 	// console.log(layer);
+		// 	// $scope.layerCurrent.layer = layer;
+		// 	$scope.state.panel = 'colors';
 
 			
-			colorPalette.current.model = model;
-			// console.log('model', colorPalette.current.model.strokeColor);
-		};
+		// 	colorPalette.current.model = model;
+		// 	// console.log('model', colorPalette.current.model.strokeColor);
+		// };
 
-		$scope.hideColors = function(e) {
-			e.stopPropagation();
-			$scope.state.panel = 'secondary';
-		};
+		// $scope.hideColors = function(e) {
+		// 	e.stopPropagation();
+		// 	$scope.state.panel = 'secondary';
+		// };
 
-		$scope.colorPalette = colorPalette; 
+		// $scope.colorPalette = colorPalette; 
 
 		function collision($div1, $div2) {
 			var x1 = $div1.offset().left;
