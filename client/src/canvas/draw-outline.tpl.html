@@ -1,5 +1,6 @@
 <svg class="layer-outline">
-	<rect 
+	<!-- size bubble -->
+  <rect 
 		ng-if="!background"
 		ng-show="layer.drawing"
 		class="dimension-text-bg"
@@ -15,12 +16,16 @@
   	ng-attr-y="{{ layer.getY() + 15 }}" 
   	class="dimension-text" 
   	ng-show="layer.drawing">{{ layer.getWidth() }} x {{ layer.getHeight() }}</text>
+  
+  <!-- outline -->
   <rect 
     class="outline" ng-class="{drawing: layer.drawing}"
     ng-attr-x="{{ layer.getX() }}" 
     ng-attr-y="{{ layer.getY() }}" 
     ng-attr-width="{{ layer.getWidth() }}" 
     ng-attr-height="{{ layer.getHeight() }}" />
+
+  <!-- resize lines (invisible areas) -->
   <line 
     ng-if="!background"
     class="resize-line resize-line-n"

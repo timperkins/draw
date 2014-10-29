@@ -21,8 +21,8 @@ angular.module('canvas', [
 		};
 	})
 // .controller('CanvasController', function($scope, $element, $attrs, drawFactory, colorPalette, font, Layer) {
-.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', '$timeout',
-	function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, $timeout) {
+.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', '$timeout', '$http',
+	function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, $timeout, $http) {
 		$scope.state = state;
 		$scope.layers = Layer.layers;
 		$scope.layerCurrent = Layer.current;
@@ -52,7 +52,9 @@ angular.module('canvas', [
 		$scope.canvasWidth = getCanvasWidth();
 
 		// Load all the layers
-		Layer.findAll();
+		// $timeout(function() {
+		// 	findAllLayers();
+		// }, 3000);
 
 		$scope.$watch('background', function(newVal, oldVal) {
 			
@@ -105,38 +107,27 @@ angular.module('canvas', [
 
 			switch ($scope.state.tool) {
 				case 'oval':
-					if ($scope.state.action === '') {
-						var layerId = $scope.layers.length;
-
-						$scope.state.action = 'drawing';
-						layerOffset = getLayerOffset(e.pageX, e.pageY);
-
-						var oval = new Oval({
-							x: layerOffset.x,
-							y: layerOffset.y,
-							id: layerId.toString(),
-							title: 'Oval (' + layerId + ')',
-							type: 'oval',
-							color: colorPalette.color,
-							drawing: true
-						});
-
-						insertNewLayer(oval);
-					}
 				case 'rectangle':
 					if ($scope.state.action === '') {
 						var numLayers = $scope.layers.length,
-							prev = Layer.current.layer ? Layer.current.layer.prev : null;
+							prev = Layer.current.layer ? Layer.current.layer.prev : null,
+							type = $scope.state.tool,
+							LayerType;
+
+						if (type == 'rectangle') {
+							LayerType = Rectangle;
+						} else if (type == 'oval') {
+							LayerType = Oval;
+						}
 
 						$scope.state.action = 'drawing';
 						layerOffset = getLayerOffset(e.pageX, e.pageY);
 
-						var rect = new Rectangle({
+						var rect = new LayerType({
 							x: layerOffset.x,
 							y: layerOffset.y,
-							// id: layerId.toString(),
-							title: 'Rectangle (' + numLayers + ')',
-							type: 'rectangle',
+							title: type.capitalize() + ' (' + numLayers + ')',
+							type: type,
 							color: colorPalette.color,
 							drawing: true,
 							prev: prev
@@ -248,7 +239,7 @@ angular.module('canvas', [
 							side = ['s', 'w'];
 							break;
 					}
-					$scope.layerCurrent.layer.resizeLine(side, e.offsetX, e.offsetY);
+					$scope.layerCurrent.layer.resizeLine(e, side, e.offsetX, e.offsetY);
 					break;
 			}
 		};
@@ -290,8 +281,6 @@ angular.module('canvas', [
 			return res;
 		};
 
-
-
 		function getLayerOffset(layerX, layerY) {
 			var canvasOffset = $('.canvas:first').offset();
 
@@ -300,35 +289,6 @@ angular.module('canvas', [
 				y: layerY - canvasOffset.top
 			};
 		}
-
-		// function createRectangle(startX, startY) {
-		// 	console.log('rect');
-		//     // Remove active from all other layers
-		//     $scope.layers.forEach(function(layer) {
-		// 		layer.active = false;
-		//     });
-
-		// 	var id = $scope.layers.length,
-		// 		newLayer = {
-		// 			width: 1,
-		// 			height: 1,
-		// 			x: startX,
-		// 			y: startY,
-		// 			id: id.toString(),
-		// 			title: 'Rectangle (' + id + ')',
-		// 			show: false,
-		// 			// active: true,
-		// 			drawing: true,
-		// 			type: 'rectangle',
-		// 			color: colorPalette.color
-		// 		};
-
-		// 	var s = new Layer(newLayer);
-
-		//     // $scope.layers.unshift(newLayer);
-		//     // $scope.layers.push(newLayer);
-		//     // $scope.layerCurrent.layer = s;
-		//   }
 
 		function createText(startX, startY) {
 			$scope.layers.forEach(function(layer) {
@@ -350,31 +310,8 @@ angular.module('canvas', [
 				};
 
 			$scope.layers.unshift(newLayer);
-			// $scope.layers.push(newLayer);
 			$scope.current.layer = newLayer;
 		}
-
-		// function insertNewLayer(newLayer) {
-		// 	// Insert before the current layer
-		// 	// var insertIndex = 0;
-		// 	// for(var i=0; i<$scope.layers.length; i++) {
-		// 	// 	var layer = $scope.layers[i];
-		// 	// 	if(angular.equals(layer, $scope.layerCurrent.layer)) {
-		// 	// 		insertIndex = i;
-		// 	// 		break;
-		// 	// 	}
-		// 	// }
-
-		// 	// Update the linked list
-		// 	// newLayer.prev = $scope.layerCurrent.prev;
-
-		// 	// Save the newLayer now so we can get its id
-		// 	// newLayer.save();
-		// 	// $scope.layerCurrent.prev = newLayer.id;
-
-		// 	$scope.layers.splice(Layer.current.index, 0, newLayer);
-		// 	$scope.layerCurrent.layer = newLayer;
-		// }
 
 		function getCanvasWidth() {
 			var canvasWrapWidth = $($element).width(),
@@ -396,6 +333,10 @@ angular.module('canvas', [
 			}
 
 			return canvasHeight; 
+		}
+
+		String.prototype.capitalize = function() {
+			return this.charAt(0).toUpperCase() + this.slice(1);
 		}
 	}
 ]);

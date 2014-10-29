@@ -1,9 +1,14 @@
 angular.module('services.layer', [
 	'services.state',
-	'services.defaults'
+	'services.defaults',
+	'services.crud-object',
+	'services.drawing'
 ])
-	.factory('Layer', ['state', '$http', '$rootScope', '$q', '$timeout', 'defaults', function(state, $http, $rootScope, $q, $timeout, defaults) {
+	.factory('Layer', ['state', 'defaults', 'CrudObject', 'Drawing', function(state, defaults, CrudObject, Drawing) {		
+
 		var Layer = function(data) {
+			var self = this;
+
 			this.width = Layer.MIN_WIDTH;
 			this.height = Layer.MIN_HEIGHT;
 			this.stroke = {
@@ -16,7 +21,26 @@ angular.module('services.layer', [
 			// this.state = state;
 			this.fillOpacity = 100;
 			this.id = null;
+			this.collection = 'layer';
+
 			angular.extend(this, data);
+
+			// Add the drawingId
+			if (!this.background) {
+				self.drawingId = Drawing.current.id;
+				// Check if Drawing is still loading current
+				// if (Drawing.current) {
+				// 	this.drawingId = Drawing.current.id;
+				// } else {
+				// 	Drawing.promise.then(function() {
+				// 		self.drawingId = Drawing.current.id;
+				// 		self.save();
+				// 	});
+				// }				
+			}
+
+
+			CrudObject.call(this, data);
 
 			// We don't want to save the background layer
 			// if(!this.background) {
@@ -37,40 +61,7 @@ angular.module('services.layer', [
 			layer: null,
 			index: 0
 		};
-		Layer.findAll = function() {
-			$http.get('/shape').success(function(data) {
-				var layers = [], 
-					layerMap = {},
-					head;
-
-				if (data) {
-					for (var i=0; i<data.length; i++) {
-						var layer = data[i];
-
-						if (!layer.prev) {
-							head = layer;
-						}
-						layerMap[layer.prev] = layer;
-					}
-				}
-				if (head) {
-					var curLayer = new Layer(head);
-					do {
-						var nextId = curLayer.id;
-						
-						layers.push(new Layer(curLayer));
-						curLayer = layerMap[nextId];
-					} while (nextId in layerMap);
-				}
-				Layer.layers.length = 0;
-				angular.extend(Layer.layers, layers);
-				if (Layer.layers.length) {
-					Layer.current.layer = Layer.layers[0];
-				}
-			}).error(function(data) {
-				console.log('error on findAll', data);
-			});
-		};
+		
 		Layer.relink = function() {
 			var curPrev = null;
 			
@@ -85,55 +76,8 @@ angular.module('services.layer', [
 			}
 		};
 
-		// Instance methods 
-		Layer.prototype.create = function() {
-			var deferred = $q.defer();
-
-			state.saveState = 'Saving ...';
-			// console.log('this', this);
-			this._create(deferred);
-
-			return deferred.promise;
-		};
-		Layer.prototype._create = function(deferred) {
-			var self = this;
-
-			$http.post('/shape', self).success(function(data) {
-				var item = data;
-
-				if (item.id) {
-					self.id = item.id;
-				}
-				state.saveState = defaults.saveState;
-				deferred.resolve();
-			}).error(function(data) {
-				console.log('error creating item in db', data);
-				deferred.reject();
-			});
-		};
-		Layer.prototype.save = function() {
-				var self = this;
-
-				state.saveState = 'Saving ...';
-
-				// Debounce for this instance
-				if (self.$saveTimeout) {
-					$timeout.cancel(self.$saveTimeout);
-				}
-				self.$saveTimeout = $timeout(function() {
-					self._save();
-					delete(self.$saveTimeout);
-				}, 500);
-		};
-		Layer.prototype._save = function() {
-			var self = this;
-
-			$http.put('/shape/' + this.id, this).success(function(data) {
-				state.saveState = defaults.saveState;
-			}).error(function(data) {
-				console.log('error', data);
-			});	
-		};
+		// Instance methods
+		Layer.prototype = Object.create(CrudObject.prototype);
 		Layer.prototype.delete = function() {
 			var self = this, 
 				removeIndex = Layer.layers.indexOf(self),
@@ -146,17 +90,6 @@ angular.module('services.layer', [
 			}
 
 			Layer.layers.splice(removeIndex, 1);
-			// var newLayers = [];
-			// for (var i=0; i<Layer.layers.length; i++) {
-			// 	if (i != removeIndex) {
-			// 		console.log('la', Layer.layers[i].title);
-			// 		newLayers.push(Layer.layers[i]);
-			// 	}
-			// }
-			// console.log('n', newLayers);
-			// Layer.layers.length = 0;
-			// angular.extend(Layer.layers, newLayers);
-			// // console.log('after layers', Layer.layers);
 
 			// Update the new current layer
 			if (self == Layer.current.layer) {
@@ -167,17 +100,9 @@ angular.module('services.layer', [
 				}
 			}
 
-			// console.log('before layers', Layer.layers);
 			console.log('about to delete', self);
 
-			$http.delete('/shape/' + self.id).success(function(data) {
-				// delete success
-				
-				
-
-			}).error(function(data) {
-				console.log('delete error', data);
-			});
+			CrudObject.prototype.delete.call(self);
 		};
 
 		Layer.prototype.moveTo = function(newX, newY) {
@@ -188,10 +113,12 @@ angular.module('services.layer', [
 			// _.debounce(this.$save, 1000, true);
 			// this.save();
 		};
-		Layer.prototype.resizeLine = function(location, newX, newY) {
+		Layer.prototype.resizeLine = function(e, location, newX, newY) {
 			if (!angular.isArray(location)) {
 				location = [location];
 			}
+
+
 
 			for (var i=0; i<location.length; i++) {
 				var loc = location[i];
@@ -219,7 +146,9 @@ angular.module('services.layer', [
 						if (newY > this.topY) {
 							this.y = this.topY;
 							this.height = newY - this.topY;
+							console.log('new y', newY, this.height);
 						} else {
+							// console.log('new y', newY, this.topY);
 							this.y = newY;
 							this.height = this.topY - newY;
 						}
@@ -233,24 +162,15 @@ angular.module('services.layer', [
 							this.width = newX - this.rightX;
 						}
 						break;
-					// case 'nw':
-					// 	// north
-					// 	if (newY < this.bottomY) {
-					// 		this.y = newY;
-					// 		this.height = this.bottomY - newY;
-					// 	} else {
-					// 		this.y = this.bottomY;
-					// 		this.height = newY - this.bottomY;
-					// 	}
-					// 	// west
-					// 	if (newX < this.rightX) {
-					// 		this.x = newX;
-					// 		this.width = this.rightX - newX;
-					// 	} else {
-					// 		this.x = this.rightX;
-					// 		this.width = newX - this.rightX;
-					// 	}
-					// 	break;
+				}
+			}
+			// Draw a square if the shift key is down (only on diagonal)
+			if (e.shiftKey && location.length == 2) {
+				console.log('shift', this.width, this.height);
+				if (this.width > this.height) {
+					this.width = this.height;
+				} else {
+					this.height = this.width;
 				}
 			}
 		};
@@ -357,92 +277,46 @@ angular.module('services.layer', [
 			self.height = endY - self.y;
 			self.endX = endX;
 			self.endY = endY;
-
-			// self.save();
-
-			// Transform X
-			// if (self.invertX) {
-			// 	rightX = self.x + self.width;
-			// 	if (endX >= rightX) {
-			// 		self.invertX = false;
-			// 		newWidth = endX - rightX;
-			// 		newX = rightX;
-			// 	} else {
-			// 		newWidth = rightX - endX;
-			// 		newX = endX;
-			// 	}
-			// } else {
-			// 	if (endX < self.x) {
-			// 		rightX = self.x;
-			// 		self.invertX = true;
-			// 		newWidth = self.x - endX;
-			// 		newX = endX;
-			// 	} else {
-			// 		newWidth = endX - self.x;
-			// 	}
-			// }
-
-			// Compare with Layer.MIN_WIDTH
-			// if(newWidth < Layer.MIN_WIDTH) {
-			// 	newWidth = Layer.MIN_WIDTH;
-			// 	if(self.invertX && endX < rightX
-			// 		|| !self.invertX && endX < self.x) {
-			// 		self.x = rightX - newWidth;
-			// 	} 
-			// }
-
-			// Set the new values
-			// self.width = newWidth;
-			// self.x = newX;
-
-			// Transform Y
-			// if (self.invertY) {
-			// 	bottomY = self.y + self.height;
-			// 	if (endY > bottomY) {
-			// 		self.invertY = false;
-			// 		newHeight = endY - bottomY;
-
-			// 		self.y = bottomY;
-
-			// 		// Compare with Layer.MIN_HEIGHT
-			// 		if(newHeight < Layer.MIN_HEIGHT) {
-			// 			newHeight = Layer.MIN_HEIGHT;
-			// 		}
-			// 	} else {
-			// 		newHeight = bottomY - endY;
-
-			// 		self.y = endY;
-
-			// 		// Compare with Layer.MIN_HEIGHT
-			// 		if(newHeight < Layer.MIN_HEIGHT) {
-			// 			newHeight = Layer.MIN_HEIGHT;
-			// 			self.y = bottomY - newHeight;
-			// 		}
-			// 	}
-			// 	self.height = newHeight;
-			// } else {
-			// 	if (endY < self.y) {
-			// 		bottomY = self.y;
-			// 		self.invertY = true;
-			// 		newHeight = self.y - endY;
-			// 		self.y = endY;
-
-			// 		// Compare with Layer.MIN_HEIGHT
-			// 		if(newHeight < Layer.MIN_HEIGHT) {
-			// 			newHeight = Layer.MIN_HEIGHT;
-			// 			self.y = bottomY - newHeight;
-			// 		}
-			// 	} else {
-			// 		newHeight = endY - self.y;
-
-			// 		// Compare with Layer.MIN_HEIGHT
-			// 		if(newHeight < Layer.MIN_HEIGHT) {
-			// 			newHeight = Layer.MIN_HEIGHT;
-			// 		}
-			// 	}
-			// 	self.height = newHeight;
-			// }
 		};
+
+
+		function findAllLayers() {
+			$http.get('/layer').success(function(data) {
+				var layers = [], 
+					layerMap = {},
+					head;
+
+				if (data) {
+					for (var i=0; i<data.length; i++) {
+						var layer = data[i];
+
+						if (!layer.prev) {
+							head = layer;
+						}
+						layerMap[layer.prev] = layer;
+					}
+				}
+				if (head) {
+					// var curLayer = createLayer(head);
+					var curLayer = head;
+					do {
+						var nextId = curLayer.id;
+						
+						layers.push(createLayer(curLayer));
+						curLayer = layerMap[nextId];
+					} while (nextId in layerMap);
+				}
+				Layer.layers.length = 0;
+				angular.extend(Layer.layers, layers);
+				if (Layer.layers.length) {
+					console.log('layers', Layer.layers);
+					Layer.current.layer = Layer.layers[0];
+				}
+			}).error(function(data) {
+				console.log('error on findAll', data);
+			});
+		}
+
 
 		return Layer;
 

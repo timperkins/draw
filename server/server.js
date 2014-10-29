@@ -15,11 +15,17 @@ var http = require('http'),
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 
 storage.addCollection(app, {
-	endpoint: 'shape',
-	collection: 'shapes',
+	endpoint: 'layer',
+	collection: 'layers',
+	parent: 'drawing',
+	parentCollection: 'drawings',
 	fields: ['width', 'height', 'x', 'y', 'color', 'fillOpacity', 'radius', 'title', 'type', 'prev'] // missing stroke.color and stroke.width (cannot contain ".")
 });
-
+storage.addCollection(app, {
+	endpoint: 'drawing',
+	collection: 'drawings',
+	fields: ['title']
+});
 
 
 // a middleware with no mount path; gets executed for every request to the app

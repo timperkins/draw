@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="draw" ng-controller="AppController">
+<html ng-app="draw">
 <head>
-	<script src="static/js/vendor.min.js"></script>
-	<script src="static/js/draw-4.js"></script>
-	<link rel="stylesheet" type="text/css" href="static/css/grunt-test.css" />
+	<script src="/static/js/vendor.min.js"></script>
+	<script src="/static/js/draw-4.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/css/grunt-test.css" />
 </head>
 <body>
-	<div class="full-page-wrap" ng-controller="FullPageController">
-		<div ng-include="'canvas/canvas.tpl.html'"></div>
-		<div ng-include="'toolbar/toolbar.tpl.html'"></div>
-		<div ng-include="'panel/panel.tpl.html'"></div>
-		<div ng-include="'header/header.tpl.html'"></div>
-	</div>
+	<div ui-view></div>
 </body>
 </html>

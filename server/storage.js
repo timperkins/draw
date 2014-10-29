@@ -3,6 +3,7 @@ var db = new MongoDB('mydb');
 exports.addCollection = function(app, data) {
 	var endpoint = data.endpoint,
 		collectionName = data.collection,
+		parent = data.parent,
 		fields = data.fields;
 
 	// CREATE
@@ -12,6 +13,10 @@ exports.addCollection = function(app, data) {
 		for (var i=0; i<fields.length; i++) {
 			var field = fields[i];
 			dbData[field] = req.body[field];
+		}
+
+		if (parent) {
+			dbData[parent + 'Id'] = req.body[parent + 'Id'];
 		}
 
 		console.log('dbData', dbData);
@@ -27,6 +32,12 @@ exports.addCollection = function(app, data) {
 	// READ (single)
 	app.get('/' + endpoint + '/:id', function(req, res) {
 		var ObjectId = require('mongodb').ObjectID;
+
+		// Cache drawing id
+		// At some point this should be moved somewhere better
+		if (endpoint == 'drawing') {
+			db.drawingId = req.params.id;
+		}
 
 		db.query({
 			collection: collectionName,
@@ -62,6 +73,10 @@ exports.addCollection = function(app, data) {
 			data[field] = req.body[field];
 		}
 
+		if (parent) {
+			data[parent + 'Id'] = req.body[parent + 'Id'];
+		}
+
 		db.query({
 			collection: collectionName,
 			action: 'update',
@@ -91,6 +106,7 @@ function MongoDB(dbName) {
 
 	self.cachedQueries = [];
 	self.db;
+	self.drawingId = null;
 
 	MongoClient.connect("mongodb://localhost:27017/" + dbName, function(err, db) {
 		if (!err) {
@@ -126,7 +142,15 @@ MongoDB.prototype.runQueries = function() {
 
 		switch(query.action) {
 			case 'find':
-				console.log('find data', query.data);
+
+				// Lookup layers by drawingId
+				if (query.collection == 'layers' && self.drawingId) {
+					var ObjectId = require('mongodb').ObjectID;
+
+					console.log('find drawingId', self.drawingId);
+					query.data.drawingId = self.drawingId;
+				}
+				
 				self.db.collection(query.collection).find(query.data, function(err, dbRes) {
 					dbRes.toArray(function(err, items) {
 						// Replace _id with id
@@ -142,6 +166,7 @@ MongoDB.prototype.runQueries = function() {
 				});
 				break;
 			case 'insert':
+				console.log('insert', query.data);
 				self.db.collection(query.collection).insert(query.data, function(err, dbRes) {
 					var item = dbRes[0];
 
