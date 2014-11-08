@@ -1,10 +1,9 @@
 angular.module('services.layer', [
 	'services.state',
 	'services.defaults',
-	'services.crud-object',
-	'services.drawing'
+	'services.crud-object'
 ])
-	.factory('Layer', ['state', 'defaults', 'CrudObject', 'Drawing', function(state, defaults, CrudObject, Drawing) {		
+	.factory('Layer', ['state', 'defaults', 'CrudObject', '$stateParams', function(state, defaults, CrudObject, $stateParams) {		
 
 		var Layer = function(data) {
 			var self = this;
@@ -26,8 +25,8 @@ angular.module('services.layer', [
 			angular.extend(this, data);
 
 			// Add the drawingId
-			if (!this.background) {
-				self.drawingId = Drawing.current.id;
+			// if (!this.background) {
+				self.drawingId = $stateParams.drawingId;
 				// Check if Drawing is still loading current
 				// if (Drawing.current) {
 				// 	this.drawingId = Drawing.current.id;
@@ -37,7 +36,7 @@ angular.module('services.layer', [
 				// 		self.save();
 				// 	});
 				// }				
-			}
+			// }
 
 
 			CrudObject.call(this, data);

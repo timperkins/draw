@@ -1,0 +1,65 @@
+.overlay-wrap {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	transition: opacity 1s;
+	background: rgba(0,0,0,0.8);
+	opacity: 0;
+	&.preshow {
+		display: block;
+	}
+	&.visible {
+		display: block;
+		opacity: 1;
+	}
+	&.hide {
+		display: block;
+		opacity: 0;
+	}
+	.overlay {
+		width: 500px;
+		margin: 150px auto 0 auto;
+	}
+	.overlay-header {
+		color: #fff;
+		margin: 0 0 50px 0;
+		font-size: 45px;
+		font-weight: 100;
+	}
+	.title-input {
+		font-size: 24px;
+		width: 100%;
+		margin-bottom: 30px;
+		border: solid 1px #999;
+		padding: 8px 20px;
+		background: #292929;
+		border-radius: 5px;
+		&:focus {
+			background: #222;
+			border-color: #bbb;
+		}
+	}
+	.start-button {
+		// background: #fff;
+		background: none;
+		padding: 10px 40px;
+		font-size: 24px;
+		color: #fff;
+		border-radius: 5px;
+		border: solid 1px #fff;
+		font-weight: 100;
+		outline: none;
+		// border: none;
+		&:not([disabled]):hover {
+			background-color: #fff;
+			color: #333;
+		}
+		&:disabled {
+			border-color: #777;
+			color: #777;
+		}
+	}
+}

@@ -1,47 +1,47 @@
 angular.module('services.panel', [])
 	.factory('panel', ['$timeout', function($timeout) {
 		return {
-			panelActive: 'layers',
-			panelStagingRight: '',
-			panelStagingLeft: '',
-			panelOverride: '',
-			panelTransition: false,
-			showPanel: function(panel, direction, overrideNext) {
+			active: 'layers',
+			stagingRight: '',
+			stagingLeft: '',
+			override: '',
+			transition: false,
+			show: function(panel, direction, overrideNext) {
 				var self = this;
 
-				if (self.panelOverride.length) {
-					panel = self.panelOverride;
-					self.panelOverride = '';
+				if (self.override.length) {
+					panel = self.override;
+					self.override = '';
 				} else if (overrideNext) {
-					self.panelOverride = overrideNext;
+					self.override = overrideNext;
 				}
 
 				if (direction == 'right') {
-					self.panelStagingRight = panel;
+					self.stagingRight = panel;
 				} else {
-					self.panelStagingLeft = panel;
+					self.stagingLeft = panel;
 				}
 				
 				// The transition needs to run after the new panel has been staged
-				self.panelTransition = false;
+				self.transition = false;
 				$timeout(function() {
-					self.panelTransition = true;
+					self.transition = true;
 					$timeout(function() {
-						var oldPanel = self.panelActive;
+						var oldPanel = self.active;
 
 						// Move 
 						if (direction == 'left') {
-							self.panelStagingRight = oldPanel;
-							self.panelStagingLeft = '';
+							self.stagingRight = oldPanel;
+							self.stagingLeft = '';
 						} else {
-							self.panelStagingLeft = oldPanel;
-							self.panelStagingRight = '';
+							self.stagingLeft = oldPanel;
+							self.stagingRight = '';
 						}
-						self.panelActive = panel;
+						self.active = panel;
 						$timeout(function() {
-							self.panelTransition = false;
-							self.panelStagingRight = '';
-							self.panelStagingLeft = '';
+							self.transition = false;
+							self.stagingRight = '';
+							self.stagingLeft = '';
 						}, 400);
 					}, 50);
 				}, 50);

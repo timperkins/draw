@@ -7,25 +7,15 @@ angular.module('panel', [
 		'components.draw-input',
 		'ui.sortable'
 	])
-  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', '$timeout', 'Drawing', 'defaults', 'panel', function($scope, $element, colorPalette, Layer, $timeout, Drawing, defaults, panel) {
-
+  .controller('PanelController', ['$scope', '$element', 'colorPalette', 'Layer', 'Rectangle', '$timeout', 'Drawing', 'defaults', 'panel', '$state', function($scope, $element, colorPalette, Layer, Rectangle, $timeout, Drawing, defaults, panel, $state) {
 
 		$scope.Drawing = Drawing;
-		$scope.layers = Layer.layers;
-		$scope.layerCurrent = Layer.current;
+		$scope.Layer = Layer;
 		$scope.background = Layer.background;
 		$scope.sorting = false;
 		$scope.overTrash = false;
 		$scope.colorPalette = colorPalette;
 		$scope.panel = panel;
-		// $scope.drawing = Drawing.current;
-		// console.log('d', Drawing.current);
-		// $scope.drawFactory = drawFactory;
-		// $scope.drawFactory = {
-		//	model: ''
-		// };
-
-		// $scope.panel = 'default';
 
 		$scope.$watch('sorting', function(newVal, oldVal) {
 			if (newVal) {
@@ -43,18 +33,28 @@ angular.module('panel', [
 			}
 		});
 
-		$scope.test = function() {
-			console.log('test!!!');
+		$scope.newDrawing = function() {
+			var drawing = new Drawing({
+				background: {
+					x: defaults.CANVAS_OVERFLOW/2,
+					y: 50,
+					title: 'Background',
+					type: 'rectangle',
+					color: '#fff',
+					width: 1100,
+					height: 500,
+					background: true
+				}
+			});
+			drawing.create().then(function() {
+				Drawing.drawings.push(drawing);
+				Drawing.current = drawing;
+				panel.show('layers', 'right');
+			});
 		};
 
-		
-
 		// Update the linked list when a layer is repositioned
-		var deleted = false;
 		$scope.sortableOptions = {
-			// start: function(e, ui) {
-			// 	ui.item.startPos = ui.item.index();
-			// },
 			start: function(e, ui) {
 				$scope.$apply(function() {
 					$scope.sorting = true;
@@ -62,162 +62,30 @@ angular.module('panel', [
 				ui.item.startPos = ui.item.index();
 			},
 			update: function(e, ui) {
-				console.log('up', e, ui);
-				// console.log('top of update');
 				$(document).off('.panelSorting');
 				if ($scope.overTrash) {
-					// ui.item.remove();
-					console.log('cancel from update');
 					ui.item.sortable.cancel();
-					// ui.item.remove();
-					deleted = true;
 					$scope.overTrash = false;
 					$timeout(function() {
-						
-						Layer.layers[ui.item.startPos].delete();
-						
+						Drawing.current.removeLayer(ui.item.startPos).save();
+						Drawing.current.save();
 					}, 10);	
 				}
 			},
-			// beforeStop: function (event, ui) {
-			// 	if(removeIntent == true){
-			// 		ui.item.remove();   
-			// 	}
-			// }
 			stop: function(e, ui) {
-				// console.log('stop');
 				// Call this in case update doesn't fire first (not sure why)
 				if ($scope.overTrash) {
-					// ui.item.remove();
 					ui.item.sortable.cancel();
-					// ui.item.remove();
-					deleted = true;
 					$scope.overTrash = false;
 					$timeout(function() {
-						
-						Layer.layers[ui.item.startPos].delete();
-						
-
+						Drawing.current.removeLayer(ui.item.startPos).save();
+						Drawing.current.save();
 					}, 10);
 				}
-
 				$scope.sorting = false;
-				if (deleted) {
-					deleted = false;
-					return;
-				}
-
-				$scope.$apply(function() {
-					console.log('relink');
-					Layer.relink();
-
-				});
-				// var currentLayer = Layer.current.layer,
-				// 	startPos = ui.item.startPos,
-				// 	endPos = ui.item.index(),
-				// 	movingBackwards = endPos > startPos;
-
-				// if (startPos === endPos) {
-				// 	return;
-				// }
-
-				// Update prev's
-
-
-
-
-				// Update the layer that was previously behind the current layer (oldNextLayer)
-				// var oldNextLayer = movingBackwards ? Layer.layers[startPos] : Layer.layers[startPos + 1];
-				// if (oldNextLayer) {
-				// 	oldNextLayer.prev = currentLayer.prev;
-				// 	oldNextLayer.save();
-				// }
-
-				// // Update prev for the current layer
-				// var newPrevLayer = Layer.layers[endPos - 1];
-				// if (newPrevLayer) {
-				// 	currentLayer.prev = newPrevLayer.id;
-				// } else {
-				// 	// currentLayer is first in the list
-				// 	currentLayer.prev = null;
-				// }
-				// currentLayer.save();
-
-				// // Update the layer behind the current layer
-				// var newNextLayer = Layer.layers[endPos + 1];
-				// if (newNextLayer) {
-				// 	newNextLayer.prev = currentLayer.id;
-				// 	newNextLayer.save();		
-				// }
+				Drawing.current.save();
 			}
 		}
-
-		// $scope.showPanel = function(panel, direction) {
-		// 	if (direction == 'right') {
-		// 		state.panelStagingRight = panel;
-		// 	} else {
-		// 		state.panelStagingLeft = panel;
-		// 	}
-			
-		// 	// The transition needs to run after the new panel has been staged
-		// 	state.panelTransition = false;
-		// 	$timeout(function() {
-		// 		state.panelTransition = true;
-		// 		$timeout(function() {
-		// 			var oldPanel = state.panelActive;
-
-		// 			// Move 
-		// 			if (direction == 'left') {
-		// 				state.panelStagingRight = oldPanel;
-		// 				state.panelStagingLeft = '';
-		// 			} else {
-		// 				state.panelStagingLeft = oldPanel;
-		// 				state.panelStagingRight = '';
-		// 			}
-		// 			state.panelActive = panel;
-		// 			$timeout(function() {
-		// 				state.panelTransition = false;
-		// 				state.panelStagingRight = '';
-		// 				state.panelStagingLeft = '';
-		// 			}, 400);
-		// 		}, 50);
-		// 	}, 50);
-
-		// };
-
-		// $scope.showSecondary = function(e, layer) {
-		// 	// e.stopPropagation();
-		// 	$scope.layerCurrent.layer = layer;
-		// 	$scope.state.panel = 'secondary';
-
-		// 	// Focus on the title input field
-		// 	setTimeout(function() {
-		// 		$($element).find('.title-edit:first').focus();	
-		// 	}, 500);
-		// };
-
-		// $scope.hideSecondary = function(e) {
-		// 	e.stopPropagation();
-		// 	$scope.state.panel = 'default';
-		// };
-
-		// $scope.showColors = function(e, model) {
-		// 	// e.stopPropagation();
-		// 	// console.log(layer);
-		// 	// $scope.layerCurrent.layer = layer;
-		// 	$scope.state.panel = 'colors';
-
-			
-		// 	colorPalette.current.model = model;
-		// 	// console.log('model', colorPalette.current.model.strokeColor);
-		// };
-
-		// $scope.hideColors = function(e) {
-		// 	e.stopPropagation();
-		// 	$scope.state.panel = 'secondary';
-		// };
-
-		// $scope.colorPalette = colorPalette; 
 
 		function collision($div1, $div2) {
 			var x1 = $div1.offset().left;
@@ -236,18 +104,4 @@ angular.module('panel', [
 			if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
 			return true;
 		}
-
-		$scope.layerClick = function(i) {
-			// Layer.current.index = i;
-
-			// If this is clicked w/o shift or cmd then un-activate the other layers
-
-
-
-			// var _ = window._;
-			// if(!_.isEqual(clickedLayer, $scope.layerCurrent.layer)) {
-			// 	console.log('clicked non active layer');
-			// 	Layer.setActive(clickedLayer);
-			// }
-		};	
   }]);

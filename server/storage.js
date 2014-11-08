@@ -19,13 +19,24 @@ exports.addCollection = function(app, data) {
 			dbData[parent + 'Id'] = req.body[parent + 'Id'];
 		}
 
-		console.log('dbData', dbData);
+
+		console.log('create', dbData);
+
+		// console.log('dbData', dbData);
 		
 		db.query({
 			collection: collectionName,
 			action: 'insert',
 			data: dbData,
-			res: res
+			res: res,
+			cb: function(item) {
+				// Cache drawing id
+				// At some point this should be moved somewhere better
+				if (endpoint == 'drawing') {
+					console.log('set id', item.id);
+					db.drawingId = item.id;
+				}
+			}
 		});
 	});
 
@@ -51,14 +62,19 @@ exports.addCollection = function(app, data) {
 
 	// READ (bulk)
 	app.get('/' + endpoint, function(req, res) {
-		var ObjectId = require('mongodb').ObjectID;
+		var ObjectId = require('mongodb').ObjectID,
+			data = {};
+
+		if (endpoint == 'layer' && db.drawingId) {
+			data.drawingId = db.drawingId;
+		}
 
 		// console.log('params', req.body.x, typeof req.body.x);
-		console.log('id', req.query);
+		// console.log('id', req.query);
 		db.query({
 			collection: collectionName,
 			action: 'find',
-			data: {},
+			data: data,
 			res: res
 		});
 	});
@@ -144,12 +160,11 @@ MongoDB.prototype.runQueries = function() {
 			case 'find':
 
 				// Lookup layers by drawingId
-				if (query.collection == 'layers' && self.drawingId) {
-					var ObjectId = require('mongodb').ObjectID;
+				// if (query.collection == 'layers' && self.drawingId) {
 
-					console.log('find drawingId', self.drawingId);
-					query.data.drawingId = self.drawingId;
-				}
+				// 	console.log('find drawingId', self.drawingId);
+				// 	query.data.drawingId = self.drawingId;
+				// }
 				
 				self.db.collection(query.collection).find(query.data, function(err, dbRes) {
 					dbRes.toArray(function(err, items) {
@@ -161,6 +176,7 @@ MongoDB.prototype.runQueries = function() {
 								delete(item._id);
 							}							
 						}
+
 						query.res.send(items);
 					});
 				});
@@ -174,6 +190,11 @@ MongoDB.prototype.runQueries = function() {
 					if(item._id) {
 						item.id = item._id;
 						delete(item._id);
+					}
+
+					// Callback
+					if (query.cb) {
+						query.cb(item);
 					}
 					query.res.send(item);
 				});

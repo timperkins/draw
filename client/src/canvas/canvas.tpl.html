@@ -16,9 +16,11 @@
     ng-mousemove="mouseMove($event)" 
     ng-mouseup="mouseUp($event)">
     <draw-rect layer="background.layer"></draw-rect>
-    <svg ng-repeat="layer in layers | reverse">
+    <svg ng-repeat="layer in Drawing.current.layers | reverse">
       <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
       <draw-oval ng-if="layer.type == 'oval'" layer="layer"></draw-oval>
+      <!-- <text x="100" y="100">d: {{ layer }}</text> -->
+
      <!--  <foreignObject ng-if="shape.type == 'text'" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}" ng-attr-width="{{ shape.getWidth() }}" ng-attr-height="{{ shape.getHeight() }}" ng-controller="ShapeCtrl" ng-class="{active: shape.active}">
         <textarea 
           class="svg-text" 
@@ -37,7 +39,9 @@
     </svg>
     <svg>
       <draw-outline layer="background.layer" background="true"></draw-outline>
-      <draw-outline ng-if="layerCurrent.layer" layer="layerCurrent.layer"></draw-outline>
-    </svg> 
+      <draw-outline ng-if="Drawing.current.layerCurrent" layer="Drawing.current.layerCurrent"></draw-outline>
+    </svg>
+    <!-- <text x="100" y="100">d: {{ Drawing.current.layerCurrent }}</text> -->
+
   </svg>
 </div>

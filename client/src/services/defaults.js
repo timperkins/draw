@@ -4,6 +4,7 @@ angular.module('services.defaults', [])
 			saveState: 'All changes saved',
 			drawing: {
 				title: 'Untitled Drawing'
-			}
+			},
+			CANVAS_OVERFLOW: 200
 		};
 	});

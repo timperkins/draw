@@ -3,8 +3,10 @@ angular.module('services.state', [
 	])
 	.factory('state', ['defaults', function(defaults) {
 		return {
-			tool: 'transform',
+			tool: 'rectangle',
 			action: '',
 			saveState: defaults.saveState
+			// drawings: [],
+			// currentDrawing: null
 		};
 	}]);

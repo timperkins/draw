@@ -1,0 +1,11 @@
+<div class="overlay-wrap" ng-controller="OverlayController" ng-class="{
+	'preshow': overlay.preshow,
+	'visible': overlay.visible,
+	'hide': hide
+}">
+	<div class="overlay">
+		<h2 class="overlay-header">Create a new drawing.</h2>
+		<input type="text" class="input-dark title-input" placeholder="Name your drawing" ng-model="drawingTitle" />
+		<button class="start-button" ng-click="createDrawing()" ng-disabled="!drawingTitle.length">Start</button>
+	</div>
+</div>
