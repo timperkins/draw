@@ -19,7 +19,10 @@
   
   <!-- outline -->
   <rect 
-    class="outline" ng-class="{drawing: layer.drawing}"
+    class="outline" ng-class="{
+      drawing: layer.drawing,
+      'panel-hover': layer.panelHover
+    }"
     ng-attr-x="{{ layer.getX() }}" 
     ng-attr-y="{{ layer.getY() }}" 
     ng-attr-width="{{ layer.getWidth() }}" 
@@ -62,7 +65,10 @@
   <!-- diagonal boxes -->
   <rect 
     ng-if="!background"
-    class="outline fill resize-diagonal resize-diagonal-nw" ng-class="{drawing: layer.drawing}"
+    class="outline fill resize-diagonal resize-diagonal-nw" ng-class="{
+      drawing: layer.drawing,
+      'panel-hover': layer.panelHover
+    }"
     ng-attr-x="{{ layer.getX() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-y="{{ layer.getY() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-width="{{ DIAGONAL_BOX_SIZE }}" 
@@ -70,7 +76,10 @@
     ng-mouseDown="layer.mouseDown($event, 'resizeLineNW')" />
   <rect 
     ng-if="!background"
-    class="outline fill resize-diagonal resize-diagonal-ne" ng-class="{drawing: layer.drawing}"
+    class="outline fill resize-diagonal resize-diagonal-ne" ng-class="{
+      drawing: layer.drawing,
+      'panel-hover': layer.panelHover
+    }"
     ng-attr-x="{{ layer.getX() + layer.getWidth() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-y="{{ layer.getY() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-width="{{ DIAGONAL_BOX_SIZE }}" 
@@ -78,7 +87,10 @@
     ng-mouseDown="layer.mouseDown($event, 'resizeLineNE')" />
   <rect 
     ng-if="!background"
-    class="outline fill resize-diagonal resize-diagonal-se" ng-class="{drawing: layer.drawing}"
+    class="outline fill resize-diagonal resize-diagonal-se" ng-class="{
+      drawing: layer.drawing,
+      'panel-hover': layer.panelHover
+    }"
     ng-attr-x="{{ layer.getX() + layer.getWidth() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-y="{{ layer.getY() + layer.getHeight() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-width="{{ DIAGONAL_BOX_SIZE }}" 
@@ -86,7 +98,10 @@
     ng-mouseDown="layer.mouseDown($event, 'resizeLineSE')" />
   <rect 
     ng-if="!background"
-    class="outline fill resize-diagonal resize-diagonal-sw" ng-class="{drawing: layer.drawing}"
+    class="outline fill resize-diagonal resize-diagonal-sw" ng-class="{
+      drawing: layer.drawing,
+      'panel-hover': layer.panelHover
+    }"
     ng-attr-x="{{ layer.getX() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-y="{{ layer.getY() + layer.getHeight() - (DIAGONAL_BOX_SIZE / 2) }}" 
     ng-attr-width="{{ DIAGONAL_BOX_SIZE }}" 

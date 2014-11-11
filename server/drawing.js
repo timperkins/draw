@@ -1,9 +1,35 @@
-// var fields = {
-// 	title: 'string',
-// 	layers: [
-
-// 	]
-// };
+var validLayerFields = {
+	width: function(width) {
+		return isInt(width);
+	},
+	height: function(height) {
+		return isInt(height);
+	},
+	color: function(color) {
+		return isString(color);
+	},
+	fillOpacity: function(fillOpacity) {
+		return isInt(fillOpacity);
+	},
+	radius: function(radius) {
+		return isInt(radius);
+	},
+	title: function(title) {
+		return isString(title); 
+	},
+	stroke: function(stroke) {
+		return isInt(stroke.width) && isString(stroke.color);
+	},
+	type: function(type) {
+		return isString(type);
+	},
+	x: function(x) {
+		return isInt(x);
+	},
+	y: function(y) {
+		return isInt(y);
+	}
+};
 
 exports.init = function(app, mongoDB) {
 	
@@ -12,7 +38,7 @@ exports.init = function(app, mongoDB) {
 		// TODO: validate all of these
 		var dbData = {
 			title: req.body['title'],
-			layers: req.body['layers'],
+			layers: getValidLayers(req.body.layers),
 			background: req.body['background']
 		};
 
@@ -55,15 +81,10 @@ exports.init = function(app, mongoDB) {
 		var ObjectId = require('mongodb').ObjectID,
 			dbData = {
 				title: req.body['title'],
-				layers: req.body['layers'],
+				layers: getValidLayers(req.body.layers),
 				background: req.body['background']
 			},
 			id = ObjectId(req.params.id);
-
-		// for (var i=0; i<fields.length; i++) {
-		// 	var field = fields[i];
-		// 	data[field] = req.body[field];
-		// }
 
 		mongoDB.db.collection('drawings').update({
 			_id: id
@@ -75,3 +96,34 @@ exports.init = function(app, mongoDB) {
 
 
 };
+
+function getValidLayers(dirtyLayers) {
+	var validLayers = [];
+	if (dirtyLayers) {
+		for (var i=0; i<dirtyLayers.length; i++) {
+			var layer = dirtyLayers[i],
+				validLayer = {};
+
+			for (var validField in validLayerFields) {
+				if (layer[validField]) {
+					if (validLayerFields[validField](layer[validField])) {
+						validLayer[validField] = layer[validField];
+					}
+				}
+			}
+
+			validLayers.push(validLayer);
+		}
+	}
+	return validLayers;
+}
+
+function isInt(value) {
+	return !isNaN(value) && 
+		parseInt(Number(value)) == value && 
+		!isNaN(parseInt(value, 10));
+}
+
+function isString(value) {
+	return typeof value == 'string';
+}

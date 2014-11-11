@@ -239,6 +239,30 @@ angular.module('services.layer', [
 			return this.y;
 		};
 
+		Layer.prototype.getOpacity = function() {
+			// If drawing or panelHover
+			// Lower opacity if opacity > 50
+			// Otherwise increase opacity
+			var self = this,
+				fillOpacity = self.fillOpacity,
+				opacityDiff = 0;
+
+			if (self.drawing) {
+				if (fillOpacity > 50) {
+					opacityDiff = -40;
+				} else {
+					opacityDiff = +20;
+				}
+			} else if (self.panelHover) {
+				if (fillOpacity > 50) {
+					opacityDiff = -20;
+				} else {
+					opacityDiff = +10;
+				}
+			}
+			return (fillOpacity + opacityDiff) * 0.01;
+		};
+
 		Layer.prototype.endDrawing = function() {
 			var self = this;
 

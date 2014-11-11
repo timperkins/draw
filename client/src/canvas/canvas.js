@@ -1,3 +1,4 @@
+var here = false;
 angular.module('canvas', [
 	'services.color-palette',
 	// 'services.layer',
@@ -24,11 +25,16 @@ angular.module('canvas', [
 	})
 // .controller('CanvasController', function($scope, $element, $attrs, drawFactory, colorPalette, font, Layer) {
 .controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', 'defaults', '$timeout', '$http', 'Drawing', function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, defaults, $timeout, $http, Drawing) {
-		console.log('top of CanvasController');
+		console.log('top of CanvasController', $scope);
+		here = true;
 		$scope.state = state;
 		// Drawing.current.layers = Layer.layers;
 		// $scope.layerCurrent = Layer.current;
+		// console.log('showCanvas');
 		$scope.showCanvas = false;
+		// if (!Drawing.current) {
+		// 	$scope.showCanvas = false;
+		// }
 		$scope.Drawing = Drawing;
 		// $scope.state = drawFactory.state;
 		// // $scope.current = drawFactory.current;
@@ -37,10 +43,32 @@ angular.module('canvas', [
 		var layerOffset;
 
 		// Create the background layer 
-		$scope.background = Layer.background;
-		if (!Layer.layers.length) {
-			console.log('no layers');
-		}
+		// $scope.background = Layer.background;
+		// $scope.background = Drawing.current.layerCurrent.background;
+		// if (!Layer.layers.length) {
+			// console.log('no layers');
+		// }
+
+
+		$scope.$watch(function() {
+			return Drawing.current;
+		}, function(newVal, oldVal) {
+			// console.log('d cur change', newVal, oldVal);
+			if (!newVal) {
+				return;
+			}
+			Drawing.current.layerOutline = Drawing.current.layerCurrent;
+			$scope.background = Drawing.current.background;
+			// console.log('Drawing.current', Drawing.current.background);
+			$scope.canvasWidth = getCanvasWidth();
+			$scope.canvasHeight = getCanvasHeight();
+
+			// Center the canvas
+			$scope.centerCanvas(function() {
+				// Show the canvas
+				$scope.showCanvas = true;
+			});
+		});
 		
 		// $scope.background.layer = new Rectangle({
 		// 	x: defaults.CANVAS_OVERFLOW/2,
@@ -54,41 +82,41 @@ angular.module('canvas', [
 		// 	background: true
 		// });
 
-		$scope.canvasHeight = getCanvasHeight();
-		$scope.canvasWidth = getCanvasWidth();
+		// $scope.canvasHeight = getCanvasHeight();
+		// $scope.canvasWidth = getCanvasWidth();
 
 		// Load all the layers
 		// $timeout(function() {
 		// 	findAllLayers();
 		// }, 3000);
 
-		$scope.$watch('background', function(newVal, oldVal) {
-			console.log('bg changed', newVal, oldVal);
-			if (!newVal.layer) {
-				return;
-			}
+		// $scope.$watch('background', function(newVal, oldVal) {
+		// 	console.log('bg changed', newVal, oldVal);
+		// 	if (!newVal.layer) {
+		// 		return;
+		// 	}
 
-			if (oldVal.layer) {			
-				// Check if the background layer width changed
-				if(newVal.layer.width != oldVal.layer.width) {
-					$scope.canvasWidth = getCanvasWidth();
-				}
-				// Check if the background layer height changed
-				if(newVal.layer.height != oldVal.layer.height) {
-					$scope.canvasHeight = getCanvasHeight();
-				}
-			} else {
-				$scope.canvasWidth = getCanvasWidth();
-				$scope.canvasHeight = getCanvasHeight();
-			}
+		// 	if (oldVal.layer) {			
+		// 		// Check if the background layer width changed
+		// 		if(newVal.layer.width != oldVal.layer.width) {
+		// 			$scope.canvasWidth = getCanvasWidth();
+		// 		}
+		// 		// Check if the background layer height changed
+		// 		if(newVal.layer.height != oldVal.layer.height) {
+		// 			$scope.canvasHeight = getCanvasHeight();
+		// 		}
+		// 	} else {
+		// 		$scope.canvasWidth = getCanvasWidth();
+		// 		$scope.canvasHeight = getCanvasHeight();
+		// 	}
 
-			// Center the canvas
-			$scope.centerCanvas(function() {
-				// Show the canvas
-				$scope.showCanvas = true;
-			});
+		// 	// Center the canvas
+		// 	$scope.centerCanvas(function() {
+		// 		// Show the canvas
+		// 		$scope.showCanvas = true;
+		// 	});
 
-		}, true);
+		// }, true);
 
 		$scope.centerCanvas = function(callback) {
 			if (!Layer.background.layer) {
@@ -98,8 +126,8 @@ angular.module('canvas', [
 				var canvasWrap = $($element),
 					canvasWrapWidth = canvasWrap.width(),
 					canvasWrapHeight = canvasWrap.height(),
-					canvasWidth = $scope.background.layer.width + defaults.CANVAS_OVERFLOW,
-					canvasHeight = $scope.background.layer.height + defaults.CANVAS_OVERFLOW,
+					canvasWidth = Drawing.current.background.width + defaults.CANVAS_OVERFLOW,
+					canvasHeight = Drawing.current.background.height + defaults.CANVAS_OVERFLOW,
 					windowWidth = $(window).width(),
 					leftOffset = (canvasWidth - canvasWrapWidth) / 2;
 				canvasWrap.scrollLeft(leftOffset);
@@ -111,6 +139,7 @@ angular.module('canvas', [
 		
 
 		$scope.mouseDown = function(e) {
+			console.log('down');
 			e.stopPropagation();
 
 			// Do nothing if right clicked
@@ -341,9 +370,9 @@ angular.module('canvas', [
 			var canvasWrapWidth = $($element).width(),
 				canvasWidth;
 
-			if (Layer.background.layer) {
-				console.log('has bg');
-				canvasWidth = $scope.background.layer.width + defaults.CANVAS_OVERFLOW;
+			if (Drawing.current) {
+				// console.log('has bg');
+				canvasWidth = Drawing.current.background.width + defaults.CANVAS_OVERFLOW;
 				if(canvasWrapWidth > canvasWidth) {
 					canvasWidth = canvasWrapWidth;
 				}
@@ -351,7 +380,7 @@ angular.module('canvas', [
 				canvasWidth = canvasWrapWidth;
 			}
 			
-			console.log('getCanvasWidth', canvasWidth);
+			// console.log('getCanvasWidth', canvasWidth);
 			return canvasWidth; 
 		}
 
@@ -359,8 +388,8 @@ angular.module('canvas', [
 			var canvasWrapHeight = $($element).height(),
 				canvasHeight;
 
-			if (Layer.background.layer) {
-				canvasHeight = $scope.background.layer.height + defaults.CANVAS_OVERFLOW;
+			if (Drawing.current) {
+				canvasHeight = Drawing.current.background.height + defaults.CANVAS_OVERFLOW;
 				if(canvasWrapHeight > canvasHeight) {
 					canvasHeight = canvasWrapHeight;
 				}

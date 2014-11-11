@@ -15,7 +15,7 @@
     ng-mousedown="mouseDown($event)" 
     ng-mousemove="mouseMove($event)" 
     ng-mouseup="mouseUp($event)">
-    <draw-rect layer="background.layer"></draw-rect>
+    <draw-rect layer="background"></draw-rect>
     <svg ng-repeat="layer in Drawing.current.layers | reverse">
       <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
       <draw-oval ng-if="layer.type == 'oval'" layer="layer"></draw-oval>
@@ -38,8 +38,8 @@
       </foreignObject> -->
     </svg>
     <svg>
-      <draw-outline layer="background.layer" background="true"></draw-outline>
-      <draw-outline ng-if="Drawing.current.layerCurrent" layer="Drawing.current.layerCurrent"></draw-outline>
+      <draw-outline layer="background" background="true"></draw-outline>
+      <draw-outline ng-if="Drawing.current.layerOutline" layer="Drawing.current.layerOutline"></draw-outline>
     </svg>
     <!-- <text x="100" y="100">d: {{ Drawing.current.layerCurrent }}</text> -->
 

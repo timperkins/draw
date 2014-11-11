@@ -19,7 +19,7 @@ angular.module("canvas/canvas.tpl.html", []).run(["$templateCache", function($te
     "    ng-mousedown=\"mouseDown($event)\" \n" +
     "    ng-mousemove=\"mouseMove($event)\" \n" +
     "    ng-mouseup=\"mouseUp($event)\">\n" +
-    "    <draw-rect layer=\"background.layer\"></draw-rect>\n" +
+    "    <draw-rect layer=\"background\"></draw-rect>\n" +
     "    <svg ng-repeat=\"layer in Drawing.current.layers | reverse\">\n" +
     "      <draw-rect ng-if=\"layer.type == 'rectangle'\" layer=\"layer\"></draw-rect>\n" +
     "      <draw-oval ng-if=\"layer.type == 'oval'\" layer=\"layer\"></draw-oval>\n" +
@@ -42,8 +42,8 @@ angular.module("canvas/canvas.tpl.html", []).run(["$templateCache", function($te
     "      </foreignObject> -->\n" +
     "    </svg>\n" +
     "    <svg>\n" +
-    "      <draw-outline layer=\"background.layer\" background=\"true\"></draw-outline>\n" +
-    "      <draw-outline ng-if=\"Drawing.current.layerCurrent\" layer=\"Drawing.current.layerCurrent\"></draw-outline>\n" +
+    "      <draw-outline layer=\"background\" background=\"true\"></draw-outline>\n" +
+    "      <draw-outline ng-if=\"Drawing.current.layerOutline\" layer=\"Drawing.current.layerOutline\"></draw-outline>\n" +
     "    </svg>\n" +
     "    <!-- <text x=\"100\" y=\"100\">d: {{ Drawing.current.layerCurrent }}</text> -->\n" +
     "\n" +
@@ -74,7 +74,10 @@ angular.module("canvas/draw-outline.tpl.html", []).run(["$templateCache", functi
     "  \n" +
     "  <!-- outline -->\n" +
     "  <rect \n" +
-    "    class=\"outline\" ng-class=\"{drawing: layer.drawing}\"\n" +
+    "    class=\"outline\" ng-class=\"{\n" +
+    "      drawing: layer.drawing,\n" +
+    "      'panel-hover': layer.panelHover\n" +
+    "    }\"\n" +
     "    ng-attr-x=\"{{ layer.getX() }}\" \n" +
     "    ng-attr-y=\"{{ layer.getY() }}\" \n" +
     "    ng-attr-width=\"{{ layer.getWidth() }}\" \n" +
@@ -117,7 +120,10 @@ angular.module("canvas/draw-outline.tpl.html", []).run(["$templateCache", functi
     "  <!-- diagonal boxes -->\n" +
     "  <rect \n" +
     "    ng-if=\"!background\"\n" +
-    "    class=\"outline fill resize-diagonal resize-diagonal-nw\" ng-class=\"{drawing: layer.drawing}\"\n" +
+    "    class=\"outline fill resize-diagonal resize-diagonal-nw\" ng-class=\"{\n" +
+    "      drawing: layer.drawing,\n" +
+    "      'panel-hover': layer.panelHover\n" +
+    "    }\"\n" +
     "    ng-attr-x=\"{{ layer.getX() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-y=\"{{ layer.getY() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-width=\"{{ DIAGONAL_BOX_SIZE }}\" \n" +
@@ -125,7 +131,10 @@ angular.module("canvas/draw-outline.tpl.html", []).run(["$templateCache", functi
     "    ng-mouseDown=\"layer.mouseDown($event, 'resizeLineNW')\" />\n" +
     "  <rect \n" +
     "    ng-if=\"!background\"\n" +
-    "    class=\"outline fill resize-diagonal resize-diagonal-ne\" ng-class=\"{drawing: layer.drawing}\"\n" +
+    "    class=\"outline fill resize-diagonal resize-diagonal-ne\" ng-class=\"{\n" +
+    "      drawing: layer.drawing,\n" +
+    "      'panel-hover': layer.panelHover\n" +
+    "    }\"\n" +
     "    ng-attr-x=\"{{ layer.getX() + layer.getWidth() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-y=\"{{ layer.getY() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-width=\"{{ DIAGONAL_BOX_SIZE }}\" \n" +
@@ -133,7 +142,10 @@ angular.module("canvas/draw-outline.tpl.html", []).run(["$templateCache", functi
     "    ng-mouseDown=\"layer.mouseDown($event, 'resizeLineNE')\" />\n" +
     "  <rect \n" +
     "    ng-if=\"!background\"\n" +
-    "    class=\"outline fill resize-diagonal resize-diagonal-se\" ng-class=\"{drawing: layer.drawing}\"\n" +
+    "    class=\"outline fill resize-diagonal resize-diagonal-se\" ng-class=\"{\n" +
+    "      drawing: layer.drawing,\n" +
+    "      'panel-hover': layer.panelHover\n" +
+    "    }\"\n" +
     "    ng-attr-x=\"{{ layer.getX() + layer.getWidth() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-y=\"{{ layer.getY() + layer.getHeight() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-width=\"{{ DIAGONAL_BOX_SIZE }}\" \n" +
@@ -141,7 +153,10 @@ angular.module("canvas/draw-outline.tpl.html", []).run(["$templateCache", functi
     "    ng-mouseDown=\"layer.mouseDown($event, 'resizeLineSE')\" />\n" +
     "  <rect \n" +
     "    ng-if=\"!background\"\n" +
-    "    class=\"outline fill resize-diagonal resize-diagonal-sw\" ng-class=\"{drawing: layer.drawing}\"\n" +
+    "    class=\"outline fill resize-diagonal resize-diagonal-sw\" ng-class=\"{\n" +
+    "      drawing: layer.drawing,\n" +
+    "      'panel-hover': layer.panelHover\n" +
+    "    }\"\n" +
     "    ng-attr-x=\"{{ layer.getX() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-y=\"{{ layer.getY() + layer.getHeight() - (DIAGONAL_BOX_SIZE / 2) }}\" \n" +
     "    ng-attr-width=\"{{ DIAGONAL_BOX_SIZE }}\" \n" +
@@ -179,7 +194,7 @@ angular.module("canvas/draw-rect.tpl.html", []).run(["$templateCache", function(
     "  	ng-attr-stroke=\"{{ layer.stroke.color }}\" \n" +
     "  	ng-attr-stroke-width=\"{{ layer.stroke.width }}\" \n" +
     "    ng-attr-fill=\"{{ layer.color }}\"\n" +
-    "    ng-attr-fill-opacity=\"{{ layer.drawing ? 0.1 : layer.fillOpacity * .01 }}\"\n" +
+    "    ng-attr-fill-opacity=\"{{ layer.getOpacity() }}\"\n" +
     "    ng-attr-rx=\"{{ layer.radius }}\"\n" +
     "    ng-attr-ry=\"{{ layer.radius }}\" />\n" +
     "  <!-- <text ng-attr-x=\"{{ layer.getX() }}\" ng-attr-y=\"{{ layer.getY() }}\">{{ layer.y }}</text>  -->\n" +
@@ -278,7 +293,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "       <input type=\"text\" class=\"input-dark title-edit main-title\" ng-model=\"Drawing.current.title\" ng-blur=\"Drawing.current.save()\" />\n" +
     "      </div>\n" +
     "      <div class=\"btn-group-vertical layer-layers\" ui-sortable=\"sortableOptions\" ng-model=\"Drawing.current.layers\">\n" +
-    "        <label class=\"btn\" ng-repeat=\"layer in Drawing.current.layers\" ng-model=\"Drawing.current.layerCurrent\" btn-radio=\"layer\" ng-click=\"Layer.current.index = $index\">\n" +
+    "        <label class=\"btn\" ng-repeat=\"layer in Drawing.current.layers\" ng-model=\"Drawing.current.layerCurrent\" btn-radio=\"layer\" ng-click=\"layerClick(layer)\" ng-mouseenter=\"layerMouseEnter(layer)\" ng-mouseleave=\"layerMouseLeave()\">\n" +
     "          <div class=\"clearfix\">\n" +
     "            <i ng-if=\"layer.type == 'rectangle'\" class=\"thumbnail thumbnail-box\" ng-style=\"{background: layer.color}\"></i>\n" +
     "            <i ng-if=\"layer.type == 'oval'\" class=\"thumbnail thumbnail-box thumbnail-oval\" ng-style=\"{background: layer.color}\"></i>\n" +
@@ -299,7 +314,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +
-    "      <!-- <div style=\"font-size: 9px; color: yellow;\">{{ Layer.background.layer }}</div> -->\n" +
+    "      <div style=\"font-size: 9px; color: yellow;\">{{ Drawing.current.layerOutline }}</div>\n" +
     "      <div class=\"bottom-buttons-wrap\">\n" +
     "        <div class=\"bottom-buttons\">\n" +
     "          <i class=\"fa fa-trash trash\" ng-class=\"{\n" +
@@ -363,7 +378,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "          </div>\n" +
     "          <div class=\"half-width-wrap\">\n" +
     "            <div class=\"half-width\">\n" +
-    "              <label class=\"attr-label\">Str Col:</label><button class=\"layer-color\" ng-style=\"{background: Drawing.current.layerCurrent.stroke.color}\" ng-click=\"showColors($event, Drawing.current.layerCurrent.stroke)\"></button>\n" +
+    "              <label class=\"attr-label\">Str Col:</label><button class=\"layer-color\" ng-style=\"{background: Drawing.current.layerCurrent.stroke.color}\" ng-click=\"panel.show('colors', 'right'); colorPalette.current.model = Drawing.current.layerCurrent.stroke\"></button>\n" +
     "            </div>\n" +
     "          </div>\n" +
     "          <div class=\"half-width-wrap\">\n" +

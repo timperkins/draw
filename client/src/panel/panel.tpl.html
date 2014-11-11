@@ -36,7 +36,7 @@
        <input type="text" class="input-dark title-edit main-title" ng-model="Drawing.current.title" ng-blur="Drawing.current.save()" />
       </div>
       <div class="btn-group-vertical layer-layers" ui-sortable="sortableOptions" ng-model="Drawing.current.layers">
-        <label class="btn" ng-repeat="layer in Drawing.current.layers" ng-model="Drawing.current.layerCurrent" btn-radio="layer" ng-click="Layer.current.index = $index">
+        <label class="btn" ng-repeat="layer in Drawing.current.layers" ng-model="Drawing.current.layerCurrent" btn-radio="layer" ng-click="layerClick(layer)" ng-mouseenter="layerMouseEnter(layer)" ng-mouseleave="layerMouseLeave()">
           <div class="clearfix">
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'oval'" class="thumbnail thumbnail-box thumbnail-oval" ng-style="{background: layer.color}"></i>
@@ -57,7 +57,7 @@
           </div>
         </label>
       </div>
-      <!-- <div style="font-size: 9px; color: yellow;">{{ Layer.background.layer }}</div> -->
+      <div style="font-size: 9px; color: yellow;">{{ Drawing.current.layerOutline }}</div>
       <div class="bottom-buttons-wrap">
         <div class="bottom-buttons">
           <i class="fa fa-trash trash" ng-class="{
@@ -121,7 +121,7 @@
           </div>
           <div class="half-width-wrap">
             <div class="half-width">
-              <label class="attr-label">Str Col:</label><button class="layer-color" ng-style="{background: Drawing.current.layerCurrent.stroke.color}" ng-click="showColors($event, Drawing.current.layerCurrent.stroke)"></button>
+              <label class="attr-label">Str Col:</label><button class="layer-color" ng-style="{background: Drawing.current.layerCurrent.stroke.color}" ng-click="panel.show('colors', 'right'); colorPalette.current.model = Drawing.current.layerCurrent.stroke"></button>
             </div>
           </div>
           <div class="half-width-wrap">

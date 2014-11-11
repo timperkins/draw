@@ -14,6 +14,18 @@
     position: absolute;
     left: 0;
     top: 0;
+    .layer-outline {
+      .outline {
+        &.panel-hover {
+          stroke: rgba(0,0,0,1);
+          box-shadow: 0 0 10px rgba(0,0,0,0.9);
+          &.fill {
+            fill: #fff;
+            fill-opacity: 1;
+          }
+        }
+      }
+    }
     &.draw {
       cursor: crosshair;
       .layer-outline {
@@ -29,6 +41,14 @@
     &.transform {
       cursor: move;
 
+      .layer-outline {
+        .outline {
+          &.drawing {
+            stroke: rgba(0,0,0,1);
+
+          }
+        }
+      }
       .layer-outline:hover {
         .outline {
           stroke: rgba(0,0,0,1);

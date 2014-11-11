@@ -58,7 +58,7 @@ angular.module('services.drawing', [
 		};
 
 		$rootScope.$on('$stateChangeSuccess', function() {
-			console.log('state change');
+			// console.log('state change');
 		});
 
 		$rootScope.$watch(function() {
@@ -67,15 +67,32 @@ angular.module('services.drawing', [
 			if (!Drawing.current) {
 				return;
 			}
+			console.log('d cur change');
+
+			// Update layers
 			Layer.layers.length = 0;
 			angular.extend(Layer.layers, Drawing.current.layers);
 			Layer.background.layer = Drawing.current.background;
 		});
 
+		// Update layerOutline
+		$rootScope.$watch(function() {
+			if (Drawing.current) {
+				return Drawing.current.layerCurrent;
+			}
+			return;
+		}, function(newVal, oldVal) {
+			if (!Drawing.current) {
+				return;
+			}
+			console.log('watch layerCurrent!');
+			Drawing.current.layerOutline = Drawing.current.layerCurrent;
+		});
+
 		function createLayer(layer) {
 			switch (layer.type) {
 				case 'rectangle':
-					console.log('is rectangle');
+					// console.log('is rectangle');
 					return new Rectangle(layer);
 					break;
 				case 'oval':

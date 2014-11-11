@@ -16,6 +16,7 @@ angular.module('panel', [
 		$scope.overTrash = false;
 		$scope.colorPalette = colorPalette;
 		$scope.panel = panel;
+		$scope.$state = $state;
 
 		$scope.$watch('sorting', function(newVal, oldVal) {
 			if (newVal) {
@@ -51,6 +52,22 @@ angular.module('panel', [
 				Drawing.current = drawing;
 				panel.show('layers', 'right');
 			});
+		};
+
+		var prevLayerOutline = null;
+		$scope.layerMouseEnter = function(layer) {
+			if (!prevLayerOutline) {
+				prevLayerOutline = Drawing.current.layerOutline;
+			}
+			Drawing.current.layerOutline = layer;
+			layer.panelHover = true;
+		};
+		$scope.layerClick = function(layer) {
+			prevLayerOutline = layer;
+		};
+		$scope.layerMouseLeave = function() {
+			Drawing.current.layerOutline.panelHover = false;
+			Drawing.current.layerOutline = prevLayerOutline;
 		};
 
 		// Update the linked list when a layer is repositioned
