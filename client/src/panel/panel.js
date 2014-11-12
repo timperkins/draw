@@ -56,9 +56,6 @@ angular.module('panel', [
 
 		var prevLayerOutline = null;
 		$scope.layerMouseEnter = function(layer) {
-			if (!prevLayerOutline) {
-				prevLayerOutline = Drawing.current.layerOutline;
-			}
 			Drawing.current.layerOutline = layer;
 			layer.panelHover = true;
 		};
@@ -86,6 +83,7 @@ angular.module('panel', [
 					$timeout(function() {
 						Drawing.current.removeLayer(ui.item.startPos).save();
 						Drawing.current.save();
+						prevLayerOutline = Drawing.current.layerCurrent;
 					}, 10);	
 				}
 			},
@@ -97,6 +95,7 @@ angular.module('panel', [
 					$timeout(function() {
 						Drawing.current.removeLayer(ui.item.startPos).save();
 						Drawing.current.save();
+						prevLayerOutline = Drawing.current.layerCurrent;
 					}, 10);
 				}
 				$scope.sorting = false;
