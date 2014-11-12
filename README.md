@@ -30,3 +30,18 @@ $ grunt watch
 ```
 
 - Open up localhost:3000
+
+## TODO
+- ~~~remove toolbar on drawings panel~~~
+- fix background edit
+- delete Drawing
+- disable Drawing sort
+- better icon for Drawing
+- save color in Drawing
+- create new Drawing on load if no Drawings exist
+- rotation
+- text
+- triangles
+- pen tool + dynamic # of shape sides
+- folders
+- users
