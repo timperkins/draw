@@ -32,7 +32,7 @@ $ grunt watch
 - Open up localhost:3000
 
 ## TODO
-- ~~~remove toolbar on drawings panel~~~
+- ~~remove toolbar on drawings panel~~
 - fix background edit
 - delete Drawing
 - disable Drawing sort
