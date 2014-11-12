@@ -1,4 +1,3 @@
-var here = false;
 angular.module('canvas', [
 	'services.color-palette',
 	// 'services.layer',
@@ -25,8 +24,6 @@ angular.module('canvas', [
 	})
 // .controller('CanvasController', function($scope, $element, $attrs, drawFactory, colorPalette, font, Layer) {
 .controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', 'defaults', '$timeout', '$http', 'Drawing', function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, defaults, $timeout, $http, Drawing) {
-		console.log('top of CanvasController', $scope);
-		here = true;
 		$scope.state = state;
 		// Drawing.current.layers = Layer.layers;
 		// $scope.layerCurrent = Layer.current;
@@ -133,7 +130,7 @@ angular.module('canvas', [
 				canvasWrap.scrollLeft(leftOffset);
 
 				callback();
-			});
+			}, 300);
 		};
 
 		

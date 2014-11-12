@@ -1,11 +1,12 @@
 angular.module('services.drawing', [
+	'ui.router',
 	'services.crud-object',
 	'services.defaults',
 	'services.layer',
 	'services.rectangle',
 	'services.oval'
 ])
-	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval) {
+	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', '$location', '$state',function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, $location, $state) {
                
 		var Drawing = function(data) {
 			var self = this;
@@ -53,6 +54,8 @@ angular.module('services.drawing', [
 
 			if (removeIndex > -1) {
 				self.layers.splice(removeIndex, 1);
+				Drawing.current.layerCurrent = Drawing.current.layers[0];
+				Drawing.current.layerOutline = Drawing.current.layerCurrent;
 			}
 			return self;
 		};
@@ -67,12 +70,18 @@ angular.module('services.drawing', [
 			if (!Drawing.current) {
 				return;
 			}
-			console.log('d cur change');
 
 			// Update layers
 			Layer.layers.length = 0;
 			angular.extend(Layer.layers, Drawing.current.layers);
 			Layer.background.layer = Drawing.current.background;
+
+			// Update location
+			// console.log('Drawing.current change', Drawing.current.id);
+			$state.go('singleDrawing', {
+				drawingId: Drawing.current.id
+			});
+			// $location.search({'drawingId': Drawing.current.id});
 		});
 
 		// Update layerOutline
@@ -85,7 +94,6 @@ angular.module('services.drawing', [
 			if (!Drawing.current) {
 				return;
 			}
-			console.log('watch layerCurrent!');
 			Drawing.current.layerOutline = Drawing.current.layerCurrent;
 		});
 

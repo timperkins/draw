@@ -45,9 +45,12 @@ angular.module("canvas/canvas.tpl.html", []).run(["$templateCache", function($te
     "      <draw-outline layer=\"background\" background=\"true\"></draw-outline>\n" +
     "      <draw-outline ng-if=\"Drawing.current.layerOutline\" layer=\"Drawing.current.layerOutline\"></draw-outline>\n" +
     "    </svg>\n" +
-    "    <!-- <text x=\"100\" y=\"100\">d: {{ Drawing.current.layerCurrent }}</text> -->\n" +
+    "    <!-- <text x=\"100\" y=\"100\">d: {{ Drawing.current.layerOutline }}</text> -->\n" +
     "\n" +
     "  </svg>\n" +
+    "  <div class=\"refresh-wrap\" ng-show=\"!showCanvas\">\n" +
+    "    <i class=\"fa fa-refresh fa-spin\"></i>\n" +
+    "  </div>\n" +
     "</div>");
 }]);
 
@@ -314,7 +317,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +
-    "      <div style=\"font-size: 9px; color: yellow;\">{{ Drawing.current.layerOutline }}</div>\n" +
+    "      <!-- <div style=\"font-size: 9px; color: yellow;\">{{ Drawing.current.layerOutline }}</div> -->\n" +
     "      <div class=\"bottom-buttons-wrap\">\n" +
     "        <div class=\"bottom-buttons\">\n" +
     "          <i class=\"fa fa-trash trash\" ng-class=\"{\n" +

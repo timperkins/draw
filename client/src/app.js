@@ -50,7 +50,10 @@ angular.module('draw', [
   			controller: 'AllDrawingsController',
   			templateUrl: 'full-page/full-page.tpl.html'
   		});
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+    	enabled: true,
+    	requireBase: false
+    });
     // $routeProvider.otherwise({redirectTo:'/projectsinfo'});
   }])
   .controller('AppController', ['$q', '$http', '$stateParams', 'Drawing', '$filter', function($q, $http, $stateParams, Drawing, $filter) {
