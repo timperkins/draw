@@ -8,6 +8,7 @@
       opacity: showCanvas ? 1 : 0
     }"
     ng-class="{
+      default: state.tool == 'default',
       draw: state.tool == 'rectangle' || state.tool == 'oval', 
       transform: state.tool == 'transform',
       text: state.tool == 'text'
