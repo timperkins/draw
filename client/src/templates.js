@@ -12,6 +12,7 @@ angular.module("canvas/canvas.tpl.html", []).run(["$templateCache", function($te
     "      opacity: showCanvas ? 1 : 0\n" +
     "    }\"\n" +
     "    ng-class=\"{\n" +
+    "      default: state.tool == 'default',\n" +
     "      draw: state.tool == 'rectangle' || state.tool == 'oval', \n" +
     "      transform: state.tool == 'transform',\n" +
     "      text: state.tool == 'text'\n" +
@@ -313,7 +314,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "            <i class=\"thumbnail thumbnail-box\" ng-style=\"{background: background.layer.color}\"></i>\n" +
     "            <p class=\"text\">{{ background.layer.title }}</p>\n" +
     "            <!-- <i class=\"edit-layer fa fa-pencil\" ng-click=\"showSecondary($event, background.layer)\"></i>  -->\n" +
-    "            <i class=\"edit-layer fa fa-pencil\" ng-click=\"panel.show('layerDetail', 'right')\"></i> \n" +
+    "            <i class=\"edit-layer fa fa-pencil\" ng-click=\"Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')\"></i> \n" +
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +
@@ -413,7 +414,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
 angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("toolbar/toolbar.tpl.html",
     "<div class=\"toolbar-wrap\" ng-controller=\"ToolbarController\">\n" +
-    "	<div class=\"btn-group-vertical\">\n" +
+    "	<div class=\"btn-group-vertical\" ng-show=\"panel.active != 'drawings'\">\n" +
     "	  <label class=\"btn\" ng-model=\"state.tool\" btn-radio=\"'transform'\"><i class=\"fa fa-arrows\"></i></label>\n" +
     "	  <label class=\"btn\" ng-model=\"state.tool\" btn-radio=\"'rectangle'\"><i class=\"fa fa-square\"></i></label>\n" +
     "	  <label class=\"btn\" ng-model=\"state.tool\" btn-radio=\"'oval'\"><i class=\"fa fa-circle\"></i></label>\n" +

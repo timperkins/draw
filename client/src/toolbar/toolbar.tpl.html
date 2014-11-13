@@ -1,5 +1,5 @@
 <div class="toolbar-wrap" ng-controller="ToolbarController">
-	<div class="btn-group-vertical">
+	<div class="btn-group-vertical" ng-show="panel.active != 'drawings'">
 	  <label class="btn" ng-model="state.tool" btn-radio="'transform'"><i class="fa fa-arrows"></i></label>
 	  <label class="btn" ng-model="state.tool" btn-radio="'rectangle'"><i class="fa fa-square"></i></label>
 	  <label class="btn" ng-model="state.tool" btn-radio="'oval'"><i class="fa fa-circle"></i></label>
