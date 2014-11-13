@@ -9,12 +9,12 @@
       <div class="top-wrap main">
         <i class="add fa fa-plus" ng-click="newDrawing()"></i> <h2 class="panel-title">Drawings</h2>
       </div>
-      <div class="btn-group-vertical layer-layers">
+      <div class="btn-group-vertical layer-layers drawing-group">
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing"> -->
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ui-sref="drawing({drawingId: drawing.id})"> -->
         <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ng-dblclick="panel.show('layers', 'right')">
           <div class="clearfix">
-            <i class="thumbnail thumbnail-box" ng-style="{background: '#fff'}"></i>
+            <i class="thumbnail thumbnail-picture fa fa-picture-o"></i>
             <p class="text">{{ drawing.title }}</p>
             <div class="action-buttons">
               <i class="edit-layer fa fa-pencil" ng-click="panel.show('layers', 'right')"></i>
