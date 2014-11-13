@@ -9,7 +9,7 @@
       <div class="top-wrap main">
         <i class="add fa fa-plus" ng-click="newDrawing()"></i> <h2 class="panel-title">Drawings</h2>
       </div>
-      <div class="btn-group-vertical layer-layers" ui-sortable="sortableOptions" ng-model="Drawing.drawings">
+      <div class="btn-group-vertical layer-layers">
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing"> -->
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ui-sref="drawing({drawingId: drawing.id})"> -->
         <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ng-dblclick="panel.show('layers', 'right')">

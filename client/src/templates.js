@@ -270,7 +270,7 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "      <div class=\"top-wrap main\">\n" +
     "        <i class=\"add fa fa-plus\" ng-click=\"newDrawing()\"></i> <h2 class=\"panel-title\">Drawings</h2>\n" +
     "      </div>\n" +
-    "      <div class=\"btn-group-vertical layer-layers\" ui-sortable=\"sortableOptions\" ng-model=\"Drawing.drawings\">\n" +
+    "      <div class=\"btn-group-vertical layer-layers\">\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\"> -->\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ui-sref=\"drawing({drawingId: drawing.id})\"> -->\n" +
     "        <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ng-dblclick=\"panel.show('layers', 'right')\">\n" +
