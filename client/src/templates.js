@@ -270,12 +270,12 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "      <div class=\"top-wrap main\">\n" +
     "        <i class=\"add fa fa-plus\" ng-click=\"newDrawing()\"></i> <h2 class=\"panel-title\">Drawings</h2>\n" +
     "      </div>\n" +
-    "      <div class=\"btn-group-vertical layer-layers\">\n" +
+    "      <div class=\"btn-group-vertical layer-layers drawing-group\">\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\"> -->\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ui-sref=\"drawing({drawingId: drawing.id})\"> -->\n" +
     "        <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ng-dblclick=\"panel.show('layers', 'right')\">\n" +
     "          <div class=\"clearfix\">\n" +
-    "            <i class=\"thumbnail thumbnail-box\" ng-style=\"{background: '#fff'}\"></i>\n" +
+    "            <i class=\"thumbnail thumbnail-picture fa fa-picture-o\"></i>\n" +
     "            <p class=\"text\">{{ drawing.title }}</p>\n" +
     "            <div class=\"action-buttons\">\n" +
     "              <i class=\"edit-layer fa fa-pencil\" ng-click=\"panel.show('layers', 'right')\"></i>\n" +
