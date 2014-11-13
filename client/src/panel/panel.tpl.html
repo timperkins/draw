@@ -15,9 +15,8 @@
         <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ng-dblclick="panel.show('layers', 'right')">
           <div class="clearfix">
             <i class="thumbnail thumbnail-picture fa fa-picture-o"></i>
-            <p class="text">{{ drawing.title }}</p>
+            <a href="#" onclick="return false" ng-click="panel.show('layers', 'right')" class="text">{{ drawing.title }}</a>
             <div class="action-buttons">
-              <i class="edit-layer fa fa-pencil" ng-click="panel.show('layers', 'right')"></i>
               <i class="fa fa-close" ng-click="Drawing.removeDrawing(drawing);"></i>
             </div>
           </div>
@@ -44,9 +43,8 @@
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'oval'" class="thumbnail thumbnail-box thumbnail-oval" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'text'" class="thumbnail thumbnail-text fa fa-font" ng-style="{color: '{{ colorPalette.color }}'}"></i>
-            <p class="text">{{ layer.title }}</p>
+            <a href="#" class="text" onclick="return false" ng-click="panel.show('layerDetail', 'right')">{{ layer.title }}</a>
             <div class="action-buttons">
-              <i class="fa fa-pencil" ng-click="panel.show('layerDetail', 'right')"></i>
               <i class="fa fa-close" ng-click="Drawing.current.removeLayer(layer); Drawing.current.save()"></i>
             </div>
           </div>
@@ -56,10 +54,7 @@
         <label class="btn" ng-click="layerClick(background.layer)" ng-dblclick="Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')">
           <div class="clearfix">
             <i class="thumbnail thumbnail-box" ng-style="{background: background.layer.color}"></i>
-            <p class="text">{{ background.layer.title }}</p>
-            <div class="action-buttons">
-              <i class="fa fa-pencil" ng-click="Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')"></i> 
-            </div>
+            <a href="#" onclick="return false"  ng-click="Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')" class="text">{{ background.layer.title }}</a>
           </div>
         </label>
       </div>
