@@ -1,12 +1,14 @@
 angular.module('header', [
-		'services.color-palette',
 		'services.state',
-		'services.panel'
+		'services.panel',
+		'services.color-palette',
+		'services.drawing'
 	])
-	.controller('HeaderController', ['$scope', 'colorPalette', 'state', 'panel', function($scope, colorPalette, state, panel) {
-		$scope.colorPalette = colorPalette;
+	.controller('HeaderController', ['$scope', 'state', 'panel', 'Drawing', 'colorPalette', function($scope, state, panel, Drawing, colorPalette) {
 		$scope.state = state;
 		$scope.panel = panel;
+		$scope.colorPalette = colorPalette;
+		$scope.Drawing = Drawing;
 		// $scope.shapes = drawFactory.shapes;
 		// $scope.activeShapes = drawFactory.activeShapes()[0];
 		// $scope.font = drawFactory.font;

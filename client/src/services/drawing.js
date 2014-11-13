@@ -16,6 +16,9 @@ angular.module('services.drawing', [
 			self.layers = [];
 			self.background = {};
 			self.layerCurrent = null;
+			self.state = {
+				color: defaults.color
+			};
 			
 			if (data.layers) {
 				for (var i=0; i<data.layers.length; i++) {

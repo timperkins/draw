@@ -31,6 +31,12 @@ var validLayerFields = {
 	}
 };
 
+var validStateFields = {
+	color: function(color) {
+		return isColor(color);
+	}
+};
+
 exports.init = function(app, mongoDB) {
 	
 	// CREATE
@@ -39,6 +45,7 @@ exports.init = function(app, mongoDB) {
 		var dbData = {
 			title: req.body['title'],
 			layers: getValidLayers(req.body.layers),
+			state: getValidState(req.body.state),
 			background: req.body['background']
 		};
 
@@ -82,6 +89,7 @@ exports.init = function(app, mongoDB) {
 			dbData = {
 				title: req.body['title'],
 				layers: getValidLayers(req.body.layers),
+				state: getValidState(req.body.state),
 				background: req.body['background']
 			},
 			id = ObjectId(req.params.id);
@@ -130,6 +138,18 @@ function getValidLayers(dirtyLayers) {
 	return validLayers;
 }
 
+function getValidState(dirtyState) {
+	var validState = {};
+	for (var validField in validStateFields) {
+		if (dirtyState[validField]) {
+			if (validStateFields[validField](dirtyState[validField])) {
+				validState[validField] = dirtyState[validField];
+			}
+		}
+	}
+	return validState;
+}
+
 function isInt(value) {
 	return !isNaN(value) && 
 		parseInt(Number(value)) == value && 
@@ -138,4 +158,9 @@ function isInt(value) {
 
 function isString(value) {
 	return typeof value == 'string';
+}
+
+function isColor(value) {
+	console.log('isColor', value.charAt(0) == '#', value.length == 7 || value.length == 4);
+	return value.charAt(0) == '#' && (value.length == 7 || value.length == 4);
 }

@@ -174,7 +174,7 @@ angular.module('canvas', [
 							y: layerOffset.y,
 							title: type.capitalize() + ' (' + numLayers + ')',
 							type: type,
-							color: colorPalette.color,
+							color: Drawing.current.state.color,
 							drawing: true,
 							prev: prev
 						});
