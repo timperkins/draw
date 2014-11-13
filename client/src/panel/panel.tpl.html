@@ -53,7 +53,7 @@
             <i class="thumbnail thumbnail-box" ng-style="{background: background.layer.color}"></i>
             <p class="text">{{ background.layer.title }}</p>
             <!-- <i class="edit-layer fa fa-pencil" ng-click="showSecondary($event, background.layer)"></i>  -->
-            <i class="edit-layer fa fa-pencil" ng-click="panel.show('layerDetail', 'right')"></i> 
+            <i class="edit-layer fa fa-pencil" ng-click="Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')"></i> 
           </div>
         </label>
       </div>
