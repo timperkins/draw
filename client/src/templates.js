@@ -273,11 +273,14 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "      <div class=\"btn-group-vertical layer-layers\" ui-sortable=\"sortableOptions\" ng-model=\"Drawing.drawings\">\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\"> -->\n" +
     "        <!-- <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ui-sref=\"drawing({drawingId: drawing.id})\"> -->\n" +
-    "        <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\">\n" +
+    "        <label class=\"btn\" ng-repeat=\"drawing in Drawing.drawings | orderBy:'title'\" ng-model=\"Drawing.current\" btn-radio=\"drawing\" ng-dblclick=\"panel.show('layers', 'right')\">\n" +
     "          <div class=\"clearfix\">\n" +
     "            <i class=\"thumbnail thumbnail-box\" ng-style=\"{background: '#fff'}\"></i>\n" +
     "            <p class=\"text\">{{ drawing.title }}</p>\n" +
-    "            <i class=\"edit-layer fa fa-pencil\" ng-click=\"panel.show('layers', 'right')\"></i>\n" +
+    "            <div class=\"action-buttons\">\n" +
+    "              <i class=\"edit-layer fa fa-pencil\" ng-click=\"panel.show('layers', 'right')\"></i>\n" +
+    "              <i class=\"fa fa-close\" ng-click=\"Drawing.removeDrawing(drawing);\"></i>\n" +
+    "            </div>\n" +
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +
@@ -297,24 +300,27 @@ angular.module("panel/panel.tpl.html", []).run(["$templateCache", function($temp
     "       <input type=\"text\" class=\"input-dark title-edit main-title\" ng-model=\"Drawing.current.title\" ng-blur=\"Drawing.current.save()\" />\n" +
     "      </div>\n" +
     "      <div class=\"btn-group-vertical layer-layers\" ui-sortable=\"sortableOptions\" ng-model=\"Drawing.current.layers\">\n" +
-    "        <label class=\"btn\" ng-repeat=\"layer in Drawing.current.layers\" ng-model=\"Drawing.current.layerCurrent\" btn-radio=\"layer\" ng-click=\"layerClick(layer)\" ng-mouseenter=\"layerMouseEnter(layer)\" ng-mouseleave=\"layerMouseLeave()\">\n" +
+    "        <label class=\"btn\" ng-repeat=\"layer in Drawing.current.layers\" ng-model=\"Drawing.current.layerCurrent\" btn-radio=\"layer\" ng-click=\"layerClick(layer)\" ng-dblclick=\"panel.show('layerDetail', 'right')\" ng-mouseenter=\"layerMouseEnter(layer)\" ng-mouseleave=\"layerMouseLeave()\">\n" +
     "          <div class=\"clearfix\">\n" +
     "            <i ng-if=\"layer.type == 'rectangle'\" class=\"thumbnail thumbnail-box\" ng-style=\"{background: layer.color}\"></i>\n" +
     "            <i ng-if=\"layer.type == 'oval'\" class=\"thumbnail thumbnail-box thumbnail-oval\" ng-style=\"{background: layer.color}\"></i>\n" +
     "            <i ng-if=\"layer.type == 'text'\" class=\"thumbnail thumbnail-text fa fa-font\" ng-style=\"{color: '{{ colorPalette.color }}'}\"></i>\n" +
     "            <p class=\"text\">{{ layer.title }}</p>\n" +
-    "            <!-- <i class=\"edit-layer fa fa-pencil\" ng-click=\"showSecondary($event, layer)\"></i>  -->\n" +
-    "            <i class=\"edit-layer fa fa-pencil\" ng-click=\"panel.show('layerDetail', 'right')\"></i>\n" +
+    "            <div class=\"action-buttons\">\n" +
+    "              <i class=\"fa fa-pencil\" ng-click=\"panel.show('layerDetail', 'right')\"></i>\n" +
+    "              <i class=\"fa fa-close\" ng-click=\"Drawing.current.removeLayer(layer); Drawing.current.save()\"></i>\n" +
+    "            </div>\n" +
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +
     "      <div class=\"btn-group-vertical layer-layers background-layer\">\n" +
-    "        <label class=\"btn\" ng-click=\"layerClick(background.layer)\">\n" +
+    "        <label class=\"btn\" ng-click=\"layerClick(background.layer)\" ng-dblclick=\"Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')\">\n" +
     "          <div class=\"clearfix\">\n" +
     "            <i class=\"thumbnail thumbnail-box\" ng-style=\"{background: background.layer.color}\"></i>\n" +
     "            <p class=\"text\">{{ background.layer.title }}</p>\n" +
-    "            <!-- <i class=\"edit-layer fa fa-pencil\" ng-click=\"showSecondary($event, background.layer)\"></i>  -->\n" +
-    "            <i class=\"edit-layer fa fa-pencil\" ng-click=\"Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')\"></i> \n" +
+    "            <div class=\"action-buttons\">\n" +
+    "              <i class=\"fa fa-pencil\" ng-click=\"Drawing.current.layerCurrent = background.layer; panel.show('layerDetail', 'right')\"></i> \n" +
+    "            </div>\n" +
     "          </div>\n" +
     "        </label>\n" +
     "      </div>\n" +

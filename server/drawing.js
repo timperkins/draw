@@ -94,7 +94,19 @@ exports.init = function(app, mongoDB) {
 		});
 	});
 
+	// DELETE
+	app.delete('/drawing/:id', function(req, res) {
+		var ObjectId = require('mongodb').ObjectID;
 
+		mongoDB.db.collection('drawings').remove({
+			_id: ObjectId(req.params.id)
+		}, function(err, dbRes) {
+			// dbRes == 1 if OK
+			res.send({
+				id: ObjectId(req.params.id)
+			});
+		});
+	});
 };
 
 function getValidLayers(dirtyLayers) {

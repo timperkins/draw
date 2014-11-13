@@ -71,8 +71,11 @@ angular.module('services.crud-object', [
 		CrudObject.prototype.delete = function() {
 			var self = this;
 
+			state.saveState = 'Saving ...';
+
 			$http.delete('/' + self.collection + '/' + self.id).success(function(data) {
 				// delete success
+				state.saveState = defaults.saveState;
 			}).error(function(data) {
 				console.log('delete error', data);
 			});

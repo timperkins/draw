@@ -132,21 +132,25 @@
             margin: 0;
             padding: 0;
           }
-          .edit-layer {
-            color: #ccc;
+          .action-buttons {
             float: right;
-            font-size: 18px;
             display: none;
-            background: none;
-            border: none;
-            height: 18px;
-            padding: 4px;
-            &:hover {
-              color: #fff;
+
+            i {
+              color: #ccc;
+              font-size: 14px;
+              background: none;
+              border: none;
+              height: 18px;
+              padding: 0 2px;
+              line-height: 30px;
+              &:hover {
+                color: #fff;
+              }
             }
           }
           &:hover {
-            .edit-layer {
+            .action-buttons {
               display: inherit;
             }
           }

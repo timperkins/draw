@@ -39,6 +39,17 @@ angular.module('services.drawing', [
 		Drawing.current = null;
 		Drawing.promise = null;
 		Drawing.drawings = [];
+		Drawing.removeDrawing = function(drawing) {
+			var removeIndex = _.isNumber(drawing) ? drawing : Drawing.drawings.indexOf(drawing);
+
+			if (removeIndex > -1) {
+				var toDelete = Drawing.drawings[removeIndex];
+
+				Drawing.drawings.splice(removeIndex, 1);
+				toDelete.delete();
+				Drawing.current = Drawing.drawings[0];
+			}
+		};
 
 		Drawing.prototype = Object.create(CrudObject.prototype);
 		Drawing.prototype.addLayer = function(layer, pos) {
