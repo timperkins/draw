@@ -1,7 +1,7 @@
 angular.module('services.defaults', [])
 	.factory('defaults', function() {
 		return {
-			color: 'green',
+			color: '#cc0000',
 			saveState: 'All changes saved',
 			drawing: {
 				title: 'Untitled Drawing'
