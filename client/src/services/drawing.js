@@ -73,6 +73,9 @@ angular.module('services.drawing', [
 				Drawing.current = Drawing.drawings[0];
 			}
 		};
+		Drawing.hasDrawings = function() {
+			return Drawing.drawings.length > 0;
+		};
 
 		Drawing.prototype = Object.create(CrudObject.prototype);
 		Drawing.prototype.addLayer = function(layer, pos) {
@@ -93,7 +96,6 @@ angular.module('services.drawing', [
 			}
 			return self;
 		};
-
 		$rootScope.$on('$stateChangeSuccess', function() {
 			// console.log('state change');
 		});
@@ -125,7 +127,7 @@ angular.module('services.drawing', [
 			}
 			return;
 		}, function(newVal, oldVal) {
-			if (!Drawing.current) {
+			if (!Drawing.current || Drawing.current.layerCurrent.background) {
 				return;
 			}
 			Drawing.current.layerOutline = Drawing.current.layerCurrent;

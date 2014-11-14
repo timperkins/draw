@@ -10,6 +10,7 @@
         <i class="add fa fa-plus" ng-click="Drawing.createDrawing()"></i> <h2 class="panel-title">Drawings</h2>
       </div>
       <div class="btn-group-vertical layer-layers drawing-group">
+        <p ng-if="!Drawing.hasDrawings()" class="no-drawings-text">Hey, you have no drawings :(<br><br>Maybe you should <a href="#" onclick="return false" ng-click="Drawing.createDrawing()">create a new drawing</a>.</p>
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing"> -->
         <!-- <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ui-sref="drawing({drawingId: drawing.id})"> -->
         <label class="btn" ng-repeat="drawing in Drawing.drawings | orderBy:'title'" ng-model="Drawing.current" btn-radio="drawing" ng-dblclick="panel.show('layers', 'right')">
