@@ -36,6 +36,9 @@ angular.module('panel', [
 
 		var prevLayerOutline = null;
 		$scope.layerMouseEnter = function(layer) {
+			if (!prevLayerOutline && Drawing.current) {
+				prevLayerOutline = Drawing.current.layerCurrent;
+			}
 			Drawing.current.layerOutline = layer;
 			layer.panelHover = true;
 		};
@@ -44,6 +47,9 @@ angular.module('panel', [
 		};
 		$scope.layerMouseLeave = function() {
 			Drawing.current.layerOutline.panelHover = false;
+			if (!prevLayerOutline) {
+				return;
+			}
 			Drawing.current.layerOutline = prevLayerOutline;
 		};
 
