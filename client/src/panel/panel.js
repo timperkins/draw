@@ -34,26 +34,6 @@ angular.module('panel', [
 			}
 		});
 
-		$scope.newDrawing = function() {
-			var drawing = new Drawing({
-				background: {
-					x: defaults.CANVAS_OVERFLOW/2,
-					y: 50,
-					title: 'Background',
-					type: 'rectangle',
-					color: '#fff',
-					width: 1100,
-					height: 500,
-					background: true
-				}
-			});
-			drawing.create().then(function() {
-				Drawing.drawings.push(drawing);
-				Drawing.current = drawing;
-				panel.show('layers', 'right');
-			});
-		};
-
 		var prevLayerOutline = null;
 		$scope.layerMouseEnter = function(layer) {
 			Drawing.current.layerOutline = layer;

@@ -72,6 +72,7 @@ angular.module('draw', [
 			Drawing.drawings = drawings;
 			if (!drawings.length) {
 				// Create a new drawing
+				Drawing.createDrawing();
 			} else if (!Drawing.current) {
 				// Select the first drawing
 				// TODO: filter alphabetize, $state.go

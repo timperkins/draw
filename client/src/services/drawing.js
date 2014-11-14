@@ -4,9 +4,10 @@ angular.module('services.drawing', [
 	'services.defaults',
 	'services.layer',
 	'services.rectangle',
-	'services.oval'
+	'services.oval',
+	'services.panel'
 ])
-	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', '$location', '$state',function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, $location, $state) {
+	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', '$location', '$state', 'panel', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, $location, $state, panel) {
                
 		var Drawing = function(data) {
 			var self = this;
@@ -42,6 +43,25 @@ angular.module('services.drawing', [
 		Drawing.current = null;
 		Drawing.promise = null;
 		Drawing.drawings = [];
+		Drawing.createDrawing = function() {
+			var drawing = new Drawing({
+				background: {
+					x: defaults.CANVAS_OVERFLOW/2,
+					y: 50,
+					title: 'Background',
+					type: 'rectangle',
+					color: '#fff',
+					width: 1100,
+					height: 500,
+					background: true
+				}
+			});
+			drawing.create().then(function() {
+				Drawing.drawings.push(drawing);
+				Drawing.current = drawing;
+				panel.show('layers', 'right');
+			});
+		};
 		Drawing.removeDrawing = function(drawing) {
 			var removeIndex = _.isNumber(drawing) ? drawing : Drawing.drawings.indexOf(drawing);
 
