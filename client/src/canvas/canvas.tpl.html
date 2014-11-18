@@ -8,42 +8,26 @@
       opacity: showCanvas ? 1 : 0
     }"
     ng-class="{
-      default: state.tool == 'default',
-      draw: state.tool == 'rectangle' || state.tool == 'oval', 
-      transform: state.tool == 'transform',
-      text: state.tool == 'text'
+      default: Drawing.current.state.tool == 'default',
+      draw: Drawing.current.state.tool == 'rectangle' || Drawing.current.state.tool == 'oval', 
+      transform: Drawing.current.state.tool == 'transform',
+      text: Drawing.current.state.tool == 'text'
     }"
     ng-mousedown="mouseDown($event)" 
     ng-mousemove="mouseMove($event)" 
     ng-mouseup="mouseUp($event)">
     <draw-rect layer="background"></draw-rect>
+    <draw-outline layer="background" background="true"></draw-outline>
     <svg ng-repeat="layer in Drawing.current.layers | reverse">
       <draw-rect ng-if="layer.type == 'rectangle'" layer="layer"></draw-rect>
       <draw-oval ng-if="layer.type == 'oval'" layer="layer"></draw-oval>
-      <!-- <text x="100" y="100">d: {{ layer }}</text> -->
-
-     <!--  <foreignObject ng-if="shape.type == 'text'" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}" ng-attr-width="{{ shape.getWidth() }}" ng-attr-height="{{ shape.getHeight() }}" ng-controller="ShapeCtrl" ng-class="{active: shape.active}">
-        <textarea 
-          class="svg-text" 
-          ng-controller="TextCtrl" 
-          ng-style="{
-            width: shape.getWidth() + 'px',
-            height: shape.getHeight() + 'px',
-            'font-size': shape.size + 'px',
-            color: shape.color
-          }" 
-          ng-click="click($event)" 
-          ng-mousedown="mouseDown($event)" 
-          ng-mouseup="mouseUp($event)" 
-          ng-focus="focus()"></textarea>
-      </foreignObject> -->
+      <!-- draw-text needs to be on top when this layer is the layerOutline -->
+      <draw-text ng-if="layer.type == 'text'" layer="layer"></draw-text>
     </svg>
     <svg>
-      <draw-outline layer="background" background="true"></draw-outline>
       <draw-outline ng-if="Drawing.current.layerOutline" layer="Drawing.current.layerOutline"></draw-outline>
     </svg>
     <!-- <text x="100" y="100">d: {{ Drawing.current.layerOutline }}</text> -->
-
   </svg>
   <div class="refresh-wrap" ng-show="!showCanvas">
     <i class="fa fa-refresh fa-spin"></i>

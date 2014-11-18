@@ -5,9 +5,9 @@ angular.module('services.drawing', [
 	'services.layer',
 	'services.rectangle',
 	'services.oval',
-	'services.panel'
+	'services.text-box'
 ])
-	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', '$location', '$state', 'panel', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, $location, $state, panel) {
+	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', 'TextBox', '$location', '$state', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, TextBox, $location, $state) {
                
 		var Drawing = function(data) {
 			var self = this;
@@ -18,7 +18,9 @@ angular.module('services.drawing', [
 			self.background = {};
 			self.layerCurrent = null;
 			self.state = {
-				color: defaults.color
+				color: defaults.color,
+				tool: defaults.tool,
+				inTextBox: false
 			};
 			
 			if (data.layers) {
@@ -45,22 +47,25 @@ angular.module('services.drawing', [
 		Drawing.drawings = [];
 		Drawing.createDrawing = function() {
 			var drawing = new Drawing({
-				background: {
-					x: defaults.CANVAS_OVERFLOW/2,
-					y: 50,
-					title: 'Background',
-					type: 'rectangle',
-					color: '#fff',
-					width: 1100,
-					height: 500,
-					background: true
-				}
-			});
+					background: {
+						x: defaults.CANVAS_OVERFLOW/2,
+						y: 50,
+						title: 'Background',
+						type: 'rectangle',
+						color: '#fff',
+						width: 1100,
+						height: 500,
+						background: true
+					}
+				}),
+				deferred = $q.defer();
 			drawing.create().then(function() {
 				Drawing.drawings.push(drawing);
 				Drawing.current = drawing;
-				panel.show('layers', 'right');
+				deferred.resolve();
+				// panel.show('layers', 'right');
 			});
+			return deferred.promise;
 		};
 		Drawing.removeDrawing = function(drawing) {
 			var removeIndex = _.isNumber(drawing) ? drawing : Drawing.drawings.indexOf(drawing);
@@ -120,17 +125,35 @@ angular.module('services.drawing', [
 			// $location.search({'drawingId': Drawing.current.id});
 		});
 
-		// Update layerOutline
+		// Update layerOutline when layerCurrent changes
 		$rootScope.$watch(function() {
 			if (Drawing.current) {
 				return Drawing.current.layerCurrent;
 			}
 			return;
 		}, function(newVal, oldVal) {
-			if (!Drawing.current || Drawing.current.layerCurrent.background) {
+			if (!Drawing.current || Drawing.current.layerCurrent.background || Drawing.current.layerCurrent.type == 'text') {
 				return;
 			}
 			Drawing.current.layerOutline = Drawing.current.layerCurrent;
+		});
+
+		// We need to set layerOutline when the tool changes to transform
+		// and unset layerOutline when the tool changes to text
+		$rootScope.$watch(function() {
+			if (Drawing.current) {
+				return Drawing.current.state.tool;
+			}
+			return;
+		}, function(newVal, oldVal) {
+			if (!Drawing.current) {
+				return;
+			}
+			if (Drawing.current.state.tool == 'transform') {
+				Drawing.current.layerOutline = Drawing.current.layerCurrent;
+			} else if (Drawing.current.state.tool == 'text') {
+				Drawing.current.layerOutline = null;
+			}
 		});
 
 		function createLayer(layer) {
@@ -141,6 +164,9 @@ angular.module('services.drawing', [
 					break;
 				case 'oval':
 					return new Oval(layer);
+					break;
+				case 'text':
+					return new TextBox(layer);
 					break;
 			}
 		}

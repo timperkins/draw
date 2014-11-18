@@ -7,7 +7,7 @@
       'staging-left': panel.stagingLeft == 'drawings'
     }">
       <div class="top-wrap main">
-        <i class="add fa fa-plus" ng-click="Drawing.createDrawing()"></i> <h2 class="panel-title">Drawings</h2>
+        <i class="add fa fa-plus" ng-click="createDrawing()"></i> <h2 class="panel-title">Drawings</h2>
       </div>
       <div class="btn-group-vertical layer-layers drawing-group">
         <p ng-if="!Drawing.hasDrawings()" class="no-drawings-text">Hey, you have no drawings :(<br><br>Maybe you should <a href="#" onclick="return false" ng-click="Drawing.createDrawing()">create a new drawing</a>.</p>
@@ -39,7 +39,7 @@
        <input type="text" class="input-dark title-edit main-title" ng-model="Drawing.current.title" ng-blur="Drawing.current.save()" />
       </div>
       <div class="btn-group-vertical layer-layers" ui-sortable="sortableOptions" ng-model="Drawing.current.layers">
-        <label class="btn" ng-repeat="layer in Drawing.current.layers" ng-model="Drawing.current.layerCurrent" btn-radio="layer" ng-click="layerClick(layer)" ng-dblclick="panel.show('layerDetail', 'right')" ng-mouseenter="layerMouseEnter(layer)" ng-mouseleave="layerMouseLeave()">
+        <label class="btn" ng-repeat="layer in Drawing.current.layers" ng-model="Drawing.current.layerCurrent" btn-radio="layer" ng-click="layerClick(layer)" ng-dblclick="panel.show('layerDetail', 'right')" ng-mouseenter="layerMouseEnter(layer)" ng-mouseleave="layerMouseLeave(layer)">
           <div class="clearfix">
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'oval'" class="thumbnail thumbnail-box thumbnail-oval" ng-style="{background: layer.color}"></i>

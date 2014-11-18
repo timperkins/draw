@@ -1,7 +1,7 @@
 angular.module('services.panel', [
-		'services.state'
+		'services.drawing'
 	])
-	.factory('panel', ['$timeout', 'state', function($timeout, state) {
+	.factory('panel', ['$timeout', 'Drawing', function($timeout, Drawing) {
 		return {
 			active: 'layers',
 			stagingRight: '',
@@ -25,9 +25,9 @@ angular.module('services.panel', [
 				}
 
 				if (panel == 'drawings') {
-					state.tool = 'default';
-				} else if (panel == 'layers' && state.tool == 'default') {
-					state.tool = 'rectangle';
+					Drawing.current.state.tool = 'default';
+				} else if (panel == 'layers' && Drawing.current.state.tool == 'default') {
+					Drawing.current.state.tool = 'rectangle';
 				}
 				
 				// The transition needs to run after the new panel has been staged

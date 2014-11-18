@@ -1,8 +1,9 @@
 angular.module('full-page', [
 		'services.state',
-		'services.layer'
+		'services.layer',
+		'services.drawing'
 	])
-  .controller('FullPageController', ['$scope','state', 'Layer', function($scope, state, Layer) {
+  .controller('FullPageController', ['$scope','state', 'Layer', 'Drawing', function($scope, state, Layer, Drawing) {
   	$scope.state = state;
   	$scope.layerCurrent = Layer.current;
     // $scope.state = drawFactory.state;
@@ -19,7 +20,7 @@ angular.module('full-page', [
 			switch(code) {
 				case 37: // left
 					e.preventDefault();
-					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
+					if(Drawing.current.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x - 1;
 							$scope.layerCurrent.layer.save();
@@ -28,7 +29,7 @@ angular.module('full-page', [
 					break;
 				case 38: // up
 					e.preventDefault();
-					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
+					if(Drawing.current.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y - 1;
 							$scope.layerCurrent.layer.save();
@@ -37,7 +38,7 @@ angular.module('full-page', [
 					break;
 				case 39: // right
 					e.preventDefault();
-					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
+					if(Drawing.current.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.x = $scope.layerCurrent.layer.x + 1;
 							$scope.layerCurrent.layer.save();
@@ -46,7 +47,7 @@ angular.module('full-page', [
 					break;
 				case 40: // down
 					e.preventDefault();
-					if($scope.state.tool == 'transform' && $scope.layerCurrent.layer) {
+					if(Drawing.current.state.tool == 'transform' && $scope.layerCurrent.layer) {
 						$scope.$apply(function() {
 							$scope.layerCurrent.layer.y = $scope.layerCurrent.layer.y + 1;
 							$scope.layerCurrent.layer.save();
@@ -55,17 +56,17 @@ angular.module('full-page', [
 					break;
 				case 84: // t
 					$scope.$apply(function() {
-						$scope.state.tool = 'text';
+						Drawing.current.state.tool = 'text';
 					});
 					break;		
 				case 85: // u
 					$scope.$apply(function() {
-						$scope.state.tool = 'rectangle';
+						Drawing.current.state.tool = 'rectangle';
 					});
 					break;
 				case 86: // v
 					$scope.$apply(function() {
-						$scope.state.tool = 'transform';
+						Drawing.current.state.tool = 'transform';
 					});
 					break;
 			}

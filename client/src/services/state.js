@@ -3,7 +3,7 @@ angular.module('services.state', [
 	])
 	.factory('state', ['defaults', function(defaults) {
 		return {
-			tool: 'rectangle',
+			// tool: 'rectangle',
 			action: '',
 			saveState: defaults.saveState
 			// drawings: [],

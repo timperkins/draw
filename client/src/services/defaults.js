@@ -6,6 +6,7 @@ angular.module('services.defaults', [])
 			drawing: {
 				title: 'Untitled Drawing'
 			},
+			tool: 'text',
 			CANVAS_OVERFLOW: 200
 		};
 	});

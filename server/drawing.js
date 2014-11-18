@@ -28,12 +28,18 @@ var validLayerFields = {
 	},
 	y: function(y) {
 		return isInt(y);
+	},
+	content: function(content) {
+		return isString(content);
 	}
 };
 
 var validStateFields = {
 	color: function(color) {
 		return isColor(color);
+	},
+	tool: function(tool) {
+		return isString(tool);
 	}
 };
 
@@ -161,6 +167,5 @@ function isString(value) {
 }
 
 function isColor(value) {
-	console.log('isColor', value.charAt(0) == '#', value.length == 7 || value.length == 4);
 	return value.charAt(0) == '#' && (value.length == 7 || value.length == 4);
 }

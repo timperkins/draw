@@ -34,10 +34,19 @@ angular.module('panel', [
 			}
 		});
 
+		$scope.createDrawing = function() {
+			Drawing.createDrawing().then(function() {
+				panel.show('layers', 'right');
+			});
+		};
+
 		var prevLayerOutline = null;
 		$scope.layerMouseEnter = function(layer) {
 			if (!prevLayerOutline && Drawing.current) {
 				prevLayerOutline = Drawing.current.layerCurrent;
+			}
+			if (layer.type == 'text') {
+				// layer.moveToTop = true;
 			}
 			Drawing.current.layerOutline = layer;
 			layer.panelHover = true;
@@ -45,10 +54,15 @@ angular.module('panel', [
 		$scope.layerClick = function(layer) {
 			prevLayerOutline = layer;
 		};
-		$scope.layerMouseLeave = function() {
+		$scope.layerMouseLeave = function(layer) {
 			Drawing.current.layerOutline.panelHover = false;
 			if (!prevLayerOutline) {
 				return;
+			}
+			if (layer.type == 'text' && Drawing.current.layerCurrent.type == 'text') {
+				Drawing.current.layerOutline = null;
+				return;
+				// layer.moveToTop = false;
 			}
 			Drawing.current.layerOutline = prevLayerOutline;
 		};

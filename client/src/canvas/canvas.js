@@ -7,8 +7,10 @@ angular.module('canvas', [
 	'services.state',
 	'services.drawing',
 	'services.defaults',
+	'services.text-box',
 	'canvas.draw-rect',
 	'canvas.draw-oval',
+	'canvas.draw-text',
 	'canvas.draw-outline'
 	// 'draw.home.draw-factory',
 	// 'draw.home.color-palette',
@@ -23,7 +25,7 @@ angular.module('canvas', [
 		};
 	})
 // .controller('CanvasController', function($scope, $element, $attrs, drawFactory, colorPalette, font, Layer) {
-.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', 'defaults', '$timeout', '$http', 'Drawing', function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, defaults, $timeout, $http, Drawing) {
+.controller('CanvasController', ['$scope', '$element', 'colorPalette', 'Rectangle', 'Oval', 'Layer', 'state', 'defaults', 'TextBox', '$timeout', '$http', 'Drawing', function($scope, $element, colorPalette, Rectangle, Oval, Layer, state, defaults, TextBox, $timeout, $http, Drawing) {
 		$scope.state = state;
 		// Drawing.current.layers = Layer.layers;
 		// $scope.layerCurrent = Layer.current;
@@ -54,7 +56,6 @@ angular.module('canvas', [
 			if (!newVal) {
 				return;
 			}
-			Drawing.current.layerOutline = Drawing.current.layerCurrent;
 			$scope.background = Drawing.current.background;
 			// console.log('Drawing.current', Drawing.current.background);
 			$scope.canvasWidth = getCanvasWidth();
@@ -151,19 +152,25 @@ angular.module('canvas', [
 				return;
 			}
 
-			switch ($scope.state.tool) {
+			switch (Drawing.current.state.tool) {
 				case 'oval':
 				case 'rectangle':
+				case 'text':
 					if ($scope.state.action === '') {
 						var numLayers = Drawing.current.layers.length,
 							prev = Layer.current.layer ? Layer.current.layer.prev : null,
-							type = $scope.state.tool,
+							type = Drawing.current.state.tool,
 							LayerType;
 
 						if (type == 'rectangle') {
 							LayerType = Rectangle;
 						} else if (type == 'oval') {
 							LayerType = Oval;
+						} else if (type == 'text') {
+							if (Drawing.current.state.inTextBox) {
+								return;
+							}
+							LayerType = TextBox;
 						}
 
 						$scope.state.action = 'drawing';
@@ -240,16 +247,11 @@ angular.module('canvas', [
 
 		$scope.mouseMove = function(e) {
 			e.stopPropagation();
-			switch ($scope.state.tool) {
+			switch (Drawing.current.state.tool) {
 				case 'oval':
 				case 'rectangle':
-					if ($scope.state.action == 'drawing') {
-						layerOffset = getLayerOffset(e.pageX, e.pageY);
-						Drawing.current.layerCurrent.setEndpoint(layerOffset.x, layerOffset.y);
-					}
-					break;
 				case 'text':
-					if ($scope.state.action == 'texting') {
+					if ($scope.state.action == 'drawing') {
 						layerOffset = getLayerOffset(e.pageX, e.pageY);
 						Drawing.current.layerCurrent.setEndpoint(layerOffset.x, layerOffset.y);
 					}
@@ -296,9 +298,10 @@ angular.module('canvas', [
 		$scope.mouseUp = function(e) {
 			e.stopPropagation();
 
-			switch ($scope.state.tool) {
+			switch (Drawing.current.state.tool) {
 				case 'oval':
 				case 'rectangle':
+				case 'text':
 					if ($scope.state.action == 'drawing') {
 						// Drawing.current.layerCurrent.drawing = false;
 						Drawing.current.layerCurrent.endDrawing();

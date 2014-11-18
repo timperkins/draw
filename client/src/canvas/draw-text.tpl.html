@@ -1,0 +1,25 @@
+<svg class="layer-wrap text-layer-wrap">
+  <foreignObject ng-attr-x="{{ layer.getX() }}" ng-attr-y="{{ layer.getY() }}" ng-attr-width="{{ layer.getWidth() }}" ng-attr-height="{{ layer.getHeight() }}">
+    <textarea 
+      class="svg-text" 
+      spellcheck="false"
+      ng-style="{
+        width: layer.getWidth() + 'px',
+        height: layer.getHeight() + 'px',
+        'font-size': layer.size + 'px',
+        color: layer.color
+      }"
+      ng-class="{
+        drawing: layer.drawing
+      }"
+      ng-model="layer.content"
+      ng-focus="focus($event)"
+      ng-blur="blur($event); Drawing.current.save()"
+      ng-mousedown="mousedown($event)"
+      ng-keydown="keydown($event)"></textarea>
+  </foreignObject>
+  <!-- This prevents editing the text when we don't want to -->
+  <rect ng-if="Drawing.current.state.tool != 'text'" class="text-overlay" ng-attr-x="{{ layer.getX() }}" ng-attr-y="{{ layer.getY() }}" ng-attr-width="{{ layer.getWidth() }}" ng-attr-height="{{ layer.getHeight() }}"></rect>
+
+  <!-- <text ng-attr-x="{{ layer.getX() }}" ng-attr-y="{{ layer.getY() }}">{{ layer.y }}</text>  -->
+</svg>
