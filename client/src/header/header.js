@@ -13,7 +13,7 @@ angular.module('header', [
 		// $scope.activeShapes = drawFactory.activeShapes()[0];
 		// $scope.font = drawFactory.font;
 		// $scope.current = drawFactory.current;
-		// $scope.FONT_SIZES = [6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60];
+		$scope.FONT_SIZES = [6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60];
 		// $scope.fontSize = 12;
 		// $scope.fontSizeDropDown = {
 		// 	isOpen: false
@@ -29,18 +29,23 @@ angular.module('header', [
 		// 	// }, 500);
 		// };
 
-		// $scope.fontSizeClick = function(e, size) {
-		// 	// e.stopPropagation();
+		$scope.fontSizeClick = function(e, size) {
+			Drawing.current.state.fontSize = size;
+			if (Drawing.current.layerCurrent.type == 'text') {
+				Drawing.current.layerCurrent.fontSize = size;
+			}
 
-		// 	if ($scope.current.shape) {
-		// 		$scope.current.shape.font.size = size;
-		// 	} else {
-		// 		$scope.current.shape = {
-		// 			font: {
-		// 				size: size
-		// 			}
-		// 		};
-		// 	}
-		// 	// $scope.fontSizeDropDown.isOpen = false;
-		// };
+			// e.stopPropagation();
+
+			// if ($scope.current.shape) {
+			// 	$scope.current.shape.font.size = size;
+			// } else {
+			// 	$scope.current.shape = {
+			// 		font: {
+			// 			size: size
+			// 		}
+			// 	};
+			// }
+			// $scope.fontSizeDropDown.isOpen = false;
+		};
 	}]);

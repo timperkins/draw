@@ -17,12 +17,13 @@ angular.module('services.drawing', [
 			self.layers = [];
 			self.background = {};
 			self.layerCurrent = null;
-			self.state = {
+			var state = {
 				color: defaults.color,
 				tool: defaults.tool,
-				inTextBox: false
+				inTextBox: false,
+				fontSize: defaults.font.size
 			};
-			
+
 			if (data.layers) {
 				for (var i=0; i<data.layers.length; i++) {
 					var layerData = data.layers[i];
@@ -40,6 +41,9 @@ angular.module('services.drawing', [
 			}
 			
 			angular.extend(self, data);
+			// Extend the state separately because it is an object
+			self.state = state;
+			angular.extend(self.state, data.state);
 			CrudObject.call(self, data);
 		};
 		Drawing.current = null;

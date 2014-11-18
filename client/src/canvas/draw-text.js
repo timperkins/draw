@@ -22,6 +22,7 @@ angular.module('canvas.draw-text', [
 				$scope.focus = function(e) {
 					setLayerOutline();
 					Drawing.current.state.inTextBox = true;
+					Drawing.current.layerCurrent = $scope.layer;
 				};
 
 				$scope.blur = function(e) {

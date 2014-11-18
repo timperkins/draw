@@ -186,6 +186,10 @@ angular.module('canvas', [
 							prev: prev
 						});
 
+						if (type == 'text') {
+							layer.fontSize = Drawing.current.state.fontSize;
+						}
+
 						// var lastCurrent = Layer.current.layer;
 
 						// Set the new shape to the current layer

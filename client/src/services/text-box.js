@@ -1,11 +1,13 @@
 angular.module('services.text-box', [
 	'services.layer',
+	'services.defaults'
 ])
-	.factory('TextBox', ['Layer', function(Layer) {
+	.factory('TextBox', ['Layer', 'defaults', function(Layer, defaults) {
 		var TextBox = function(data) {
 			var self = this;
 
 			self.content = '';
+			self.fontSize = defaults.font.size;
 
 			Layer.call(self, data);
 			angular.extend(self, data);

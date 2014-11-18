@@ -16,6 +16,11 @@ angular.module('full-page', [
     // ng-keydown doesn't seem to be working, so we'll just use jQuery for now
     $(document).on('keydown', function(e) {
 			var code = e.which;
+
+			if (Drawing.current && Drawing.current.state.inTextBox) {
+				return;
+			}
+
 			console.log('key: ', code);
 			switch(code) {
 				case 37: // left

@@ -1,15 +1,15 @@
 <div class="header-wrap" ng-controller="HeaderController">
 	<h1>Draw</h1>
 	<button ng-show="Drawing.current.state.color" class="active-color" ng-style="{background: Drawing.current.state.color}" ng-click="panel.show('colors', 'right', 'layers'); colorPalette.current.model = Drawing.current.state"></button>
-	<span class="save-state">{{ state.saveState }}</span>
-	<!-- <div class="font-size-wrap" ng-if="state.tool == 'text'">
-	  <input type="text" class="font-size-input" ng-model="current.shape.font.size" /><div class="btn-group font-size-dropdown" dropdown>
+	<div class="font-size-wrap" ng-if="Drawing.current.state.tool == 'text'">
+	  <input type="text" class="font-size-input" ng-model="Drawing.current.state.fontSize" /><div class="btn-group font-size-dropdown" dropdown>
 	    <button type="button" class="btn btn-primary dropdown-toggle">
 	      <span class="caret"></span>
 	    </button>
 	    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-	      <li ng-repeat="SIZE in FONT_SIZES"><button ng-click="fontSizeClick($event, SIZE)">{{ SIZE }}</button></li>
+	      <li ng-repeat="size in FONT_SIZES"><button ng-click="fontSizeClick($event, size); Drawing.current.save()">{{ size }}</button></li>
 	    </ul>
 	  </div>
-	</div> -->
+	</div>
+	<span class="save-state">{{ state.saveState }}</span>
 </div>

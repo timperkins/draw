@@ -7,6 +7,9 @@ angular.module('services.defaults', [])
 				title: 'Untitled Drawing'
 			},
 			tool: 'text',
+			font: {
+				size: 16
+			},
 			CANVAS_OVERFLOW: 200
 		};
 	});

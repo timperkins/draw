@@ -31,6 +31,9 @@ var validLayerFields = {
 	},
 	content: function(content) {
 		return isString(content);
+	},
+	fontSize: function(fontSize) {
+		return isInt(fontSize) && isPositive(fontSize);
 	}
 };
 
@@ -40,6 +43,9 @@ var validStateFields = {
 	},
 	tool: function(tool) {
 		return isString(tool);
+	},
+	fontSize: function(fontSize) {
+		return isInt(fontSize) && isPositive(fontSize);
 	}
 };
 
@@ -160,6 +166,10 @@ function isInt(value) {
 	return !isNaN(value) && 
 		parseInt(Number(value)) == value && 
 		!isNaN(parseInt(value, 10));
+}
+
+function isPositive(value) {
+	return value > 0;
 }
 
 function isString(value) {
