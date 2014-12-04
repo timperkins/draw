@@ -38,7 +38,7 @@ angular.module('services.drawing', [
 			}
 
 			// Create the photo gallery
-			if (data.photoGallery.length === 0) {
+			if (data.photoGallery && data.photoGallery.length === 0) {
 				// Use default pictures instead
 				delete data.photoGallery;
 				for (var i=0; i<defaults.pictureUrls.length; i++) {
