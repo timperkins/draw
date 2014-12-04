@@ -1,11 +1,27 @@
 <div class="overlay-wrap" ng-controller="OverlayController" ng-class="{
 	'preshow': overlay.preshow,
 	'visible': overlay.visible,
-	'hide': hide
+	'hide': overlay.notVisible
 }">
-	<div class="overlay">
-		<h2 class="overlay-header">Create a new drawing.</h2>
-		<input type="text" class="input-dark title-input" placeholder="Name your drawing" ng-model="drawingTitle" />
-		<button class="start-button" ng-click="createDrawing()" ng-disabled="!drawingTitle.length">Start</button>
+	<div ng-if="overlay.content == 'image'" class="image-overlay">
+		<div class="images-wrap">
+			<h2 class="overlay-header">Select an image.</h2>
+			<!-- <span style="color: #fff">{{ Drawing.current.photoGallery | json }}</span> -->
+			<div class="images">
+				<a ng-repeat="photo in Drawing.current.photoGallery" href="#"  class="image-thumbnail" onclick="return false" ng-click="selectImage(photo)">
+					<img ng-if="photo.loaded" src="{{ photo.src }}" />
+					<div ng-if="!photo.loaded"><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" /><i class="fa fa-refresh fa-spin photo-loading"></i></div>
+					<i class="fa fa-close" href="#" onclick="return false" ng-click="removeImage($event, photo)"></i>
+				</a>
+			</div>
+		</div>
+		<div class="add-image-wrap">
+			<div class="add-image">
+				<h3 class="add-image-header">Add new image.</h3>
+				<input type="text" class="input-dark big-input" placeholder="http://" ng-model="image.url" />
+				<button class="big-button" ng-click="Drawing.current.addPhotoGalleryItem(image.url, true); Drawing.current.save();" ng-disabled="!image.url.length">Add to library</button>
+			</div>
+		</div>
 	</div>
+	<i class="fa fa-close hide-overlay" ng-click="overlay.hide()"></i>
 </div>

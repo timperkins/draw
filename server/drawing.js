@@ -34,6 +34,9 @@ var validLayerFields = {
 	},
 	fontSize: function(fontSize) {
 		return isInt(fontSize) && isPositive(fontSize);
+	},
+	src: function(src) {
+		return isLink(src);
 	}
 };
 
@@ -46,6 +49,12 @@ var validStateFields = {
 	},
 	fontSize: function(fontSize) {
 		return isInt(fontSize) && isPositive(fontSize);
+	}
+};
+
+var validPhotoGalleryFields = {
+	src: function(src) {
+		return isLink(src);
 	}
 };
 
@@ -102,6 +111,7 @@ exports.init = function(app, mongoDB) {
 				title: req.body['title'],
 				layers: getValidLayers(req.body.layers),
 				state: getValidState(req.body.state),
+				photoGallery: getValidPhotoGallery(req.body.photoGallery),
 				background: req.body['background']
 			},
 			id = ObjectId(req.params.id);
@@ -162,6 +172,27 @@ function getValidState(dirtyState) {
 	return validState;
 }
 
+function getValidPhotoGallery(dirtyPhotoGallery) {
+	var validPhotoGallery = [];
+	if (dirtyPhotoGallery) {
+		for (var i=0; i<dirtyPhotoGallery.length; i++) {
+			var photo = dirtyPhotoGallery[i],
+				validPhoto = {};
+
+			for (var validField in validPhotoGalleryFields) {
+				if (photo[validField]) {
+					if (validPhotoGalleryFields[validField](photo[validField])) {
+						validPhoto[validField] = photo[validField];
+					}
+				}
+			}
+
+			validPhotoGallery.push(validPhoto);
+		}
+	}
+	return validPhotoGallery;
+}
+
 function isInt(value) {
 	return !isNaN(value) && 
 		parseInt(Number(value)) == value && 
@@ -178,4 +209,8 @@ function isString(value) {
 
 function isColor(value) {
 	return value.charAt(0) == '#' && (value.length == 7 || value.length == 4);
+}
+
+function isLink(value) {
+	return typeof value == 'string';
 }

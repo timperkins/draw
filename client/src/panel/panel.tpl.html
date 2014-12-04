@@ -44,6 +44,7 @@
             <i ng-if="layer.type == 'rectangle'" class="thumbnail thumbnail-box" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'oval'" class="thumbnail thumbnail-box thumbnail-oval" ng-style="{background: layer.color}"></i>
             <i ng-if="layer.type == 'text'" class="thumbnail thumbnail-text fa fa-font" ng-style="{color: layer.color}"></i>
+            <i ng-if="layer.type == 'picture'" class="thumbnail thumbnail-picture fa fa-picture-o" ng-style="{color: layer.color}"></i>
             <a href="#" class="text" onclick="return false" ng-click="panel.show('layerDetail', 'right')">{{ layer.title }}</a>
             <div class="action-buttons">
               <i class="fa fa-close" ng-click="Drawing.current.removeLayer(layer); Drawing.current.save()"></i>

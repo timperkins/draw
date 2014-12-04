@@ -60,19 +60,14 @@ angular.module('services.layer', [
 			layer: null,
 			index: 0
 		};
-		
-		Layer.relink = function() {
-			var curPrev = null;
-			
-			for (var i=0; i<Layer.layers.length; i++) {
-				var curLayer = Layer.layers[i];
 
-				if (curLayer.prev != curPrev) {
-					curLayer.prev = curPrev;
-					curLayer.save();
-				}
-				curPrev = curLayer.id;
-			}
+		Layer.getOffset = function(layerX, layerY) {
+			var canvasOffset = $('.canvas:first').offset();
+
+			return {
+				x: layerX - canvasOffset.left,
+				y: layerY - canvasOffset.top
+			};
 		};
 
 		// Instance methods

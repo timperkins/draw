@@ -1,3 +1,5 @@
+@transition-time: 700ms;
+
 .overlay-wrap {
 	position: absolute;
 	left: 0;
@@ -5,8 +7,8 @@
 	width: 100%;
 	height: 100%;
 	display: none;
-	transition: opacity 1s;
-	background: rgba(0,0,0,0.8);
+	transition: opacity @transition-time;
+	background: rgba(0,0,0,0.9);
 	opacity: 0;
 	&.preshow {
 		display: block;
@@ -19,18 +21,53 @@
 		display: block;
 		opacity: 0;
 	}
-	.overlay {
-		width: 500px;
-		margin: 150px auto 0 auto;
-	}
 	.overlay-header {
 		color: #fff;
-		margin: 0 0 50px 0;
 		font-size: 45px;
 		font-weight: 100;
+		margin-top: 0;
+		margin-bottom: 0;
+		text-align: center;
 	}
-	.title-input {
-		font-size: 24px;
+	.image-overlay {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.images-wrap {
+		position: absolute;
+		left: 0;
+		right: 400px;
+		top: 0;
+		bottom: 0;
+		padding-top: 50px;
+		overflow-y: scroll;
+		.images {
+			padding: 30px;
+		}
+	}
+	.add-image-wrap {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		top: 0;
+		width: 400px;
+		padding-top: 70px;
+		background: rgba(0,0,0,0.3);
+		.add-image {
+			padding: 20px;
+		}
+	}
+	.add-image-header {
+		font-size: 35px;
+		color: #fff;
+		font-weight: 100;
+		margin-top: 0;
+	}
+	.big-input {
+		font-size: 20px;
 		width: 100%;
 		margin-bottom: 30px;
 		border: solid 1px #999;
@@ -42,11 +79,11 @@
 			border-color: #bbb;
 		}
 	}
-	.start-button {
+	.big-button {
 		// background: #fff;
 		background: none;
 		padding: 10px 40px;
-		font-size: 24px;
+		font-size: 20px;
 		color: #fff;
 		border-radius: 5px;
 		border: solid 1px #fff;
@@ -60,6 +97,60 @@
 		&:disabled {
 			border-color: #777;
 			color: #777;
+		}
+	}
+	.hide-overlay {
+		color: #eee;
+		font-size: 30px;
+		position: absolute;
+		right: 40px;
+		top: 30px;
+		cursor: pointer;
+		&:hover {
+			color: #fff;
+		}
+	}
+	.image-thumbnail {
+		padding: 5px;
+		border: solid 1px #777;
+		border-radius: 5px;
+		margin: 20px;
+		display: inline-block;
+		position: relative;
+		&:hover {
+			border-color: #fff;
+			.fa-close {
+				display: inherit;
+			}
+		}
+		&.selected {
+			border-color: @active-color;
+			border-width: 3px;
+			padding: 3px;
+		}
+		img {
+			display: block;
+			width: 100px;
+			height: 100px;
+		}
+		.photo-loading {
+			position: absolute;
+			left: calc(50% - 12.5px);
+			top: calc(50% - 12.5px);
+			font-size: 25px;
+			color: #555;
+		}
+		.fa-close {
+			display: none;
+			color: rgba(255,255,255,0.9);
+			font-size: 18px;
+			position: absolute;
+			right: 1px;
+			top: 0px;
+			text-shadow: 0 0 5px #000;
+			&:hover {
+				color: rgba(255,255,255,1);
+			}
 		}
 	}
 }

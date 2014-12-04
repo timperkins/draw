@@ -5,9 +5,10 @@ angular.module('services.drawing', [
 	'services.layer',
 	'services.rectangle',
 	'services.oval',
-	'services.text-box'
+	'services.text-box',
+	'services.picture'
 ])
-	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', 'TextBox', '$location', '$state', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, TextBox, $location, $state) {
+	.factory('Drawing', ['CrudObject', 'defaults', '$stateParams', '$http', '$q', 'Layer', '$rootScope', 'Rectangle', 'Oval', 'TextBox', '$location', '$state', 'Picture', '$timeout', function(CrudObject, defaults, $stateParams, $http, $q, Layer, $rootScope, Rectangle, Oval, TextBox, $location, $state, Picture, $timeout) {
                
 		var Drawing = function(data) {
 			var self = this;
@@ -16,6 +17,7 @@ angular.module('services.drawing', [
 			self.collection = 'drawing';
 			self.layers = [];
 			self.background = {};
+			self.photoGallery = [];
 			self.layerCurrent = null;
 			var state = {
 				color: defaults.color,
@@ -33,6 +35,17 @@ angular.module('services.drawing', [
 				self.layerCurrent = self.layers[0];
 
 				delete(data.layers);
+			}
+
+			// Create the photo gallery
+			if (data.photoGallery.length === 0) {
+				// Use default pictures instead
+				delete data.photoGallery;
+				for (var i=0; i<defaults.pictureUrls.length; i++) {
+					var pictureUrl = defaults.pictureUrls[i];
+
+					self.addPhotoGalleryItem(pictureUrl);
+				}
 			}
 
 			if (data.background) {
@@ -87,6 +100,58 @@ angular.module('services.drawing', [
 		};
 
 		Drawing.prototype = Object.create(CrudObject.prototype);
+		Drawing.prototype.addPhotoGalleryItem = function(url, loadImmediately) {
+			var self = this,
+				photoGalleryItem = {
+					src: url,
+					loaded: false,
+					selected: false
+				};
+
+			self.photoGallery.push(photoGalleryItem);
+			if (loadImmediately) {
+				self._loadPhotoGalleryItem(photoGalleryItem);
+			}
+		};
+		Drawing.prototype.loadPhotoGallery = function() {
+			var self = this;
+
+			// Start serial loading the pictures
+			self._loadPhotoGalleryItemByIndex(0);
+		};
+		// Recursive function to serially load the photo gallery items
+		Drawing.prototype._loadPhotoGalleryItemByIndex = function(i) {
+			var self = this,
+				photoGalleryItem = self.photoGallery[i];
+
+			if (!photoGalleryItem) {
+				return;
+			}
+			i++;
+			if (!photoGalleryItem.loaded) {
+				self._loadPhotoGalleryItem(photoGalleryItem).then(function() {
+					self._loadPhotoGalleryItemByIndex(i);
+				});
+			} else {
+				self._loadPhotoGalleryItemByIndex(i);
+			}
+		};
+		Drawing.prototype._loadPhotoGalleryItem = function(item) {
+			var deferred = $q.defer();
+
+			$timeout(function() {
+				Picture.loadPicture(item.src).then(function(image) {
+					angular.extend(item, {
+						loaded: true,
+						nativeWidth: image.width,
+						nativeHeight: image.height
+					});
+					deferred.resolve();
+				});
+			}, 200);
+
+			return deferred.promise;
+		}
 		Drawing.prototype.addLayer = function(layer, pos) {
 			var self = this;
 
@@ -171,6 +236,9 @@ angular.module('services.drawing', [
 					break;
 				case 'text':
 					return new TextBox(layer);
+					break;
+				case 'picture':
+					return new Picture(layer);
 					break;
 			}
 		}

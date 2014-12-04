@@ -10,6 +10,7 @@ angular.module('services.defaults', [])
 			font: {
 				size: 16
 			},
-			CANVAS_OVERFLOW: 200
+			CANVAS_OVERFLOW: 200,
+			pictureUrls: ['/static/image.png', '/static/image.png']
 		};
 	});

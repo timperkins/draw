@@ -1,0 +1,14 @@
+<svg class="layer-wrap">
+  <image
+    ng-attr-x="{{ layer.getX() }}" 
+    ng-attr-y="{{ layer.getY() }}" 
+    ng-attr-width="{{ layer.width }}" 
+    ng-attr-height="{{ layer.height }}" 
+    ng-attr-stroke="{{ layer.stroke.color }}" 
+    ng-attr-stroke-width="{{ layer.stroke.width }}" 
+    ng-attr-fill-opacity="{{ layer.getOpacity() }}"
+    ng-attr-rx="{{ layer.radius }}"
+    ng-attr-ry="{{ layer.radius }}" 
+    xlink:href="{{ layer.src | trusted }}">
+  </image>
+</svg>

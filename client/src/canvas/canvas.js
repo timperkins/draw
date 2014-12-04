@@ -11,6 +11,7 @@ angular.module('canvas', [
 	'canvas.draw-rect',
 	'canvas.draw-oval',
 	'canvas.draw-text',
+	'canvas.draw-picture',
 	'canvas.draw-outline'
 	// 'draw.home.draw-factory',
 	// 'draw.home.color-palette',
@@ -174,7 +175,7 @@ angular.module('canvas', [
 						}
 
 						$scope.state.action = 'drawing';
-						layerOffset = getLayerOffset(e.pageX, e.pageY);
+						layerOffset = Layer.getOffset(e.pageX, e.pageY);
 
 						var layer = new LayerType({
 							x: layerOffset.x,
@@ -242,7 +243,7 @@ angular.module('canvas', [
 					if ($scope.state.action === '') {
 						$scope.state.action = 'texting';
 
-						layerOffset = getLayerOffset(e.pageX, e.pageY);
+						layerOffset = Layer.getOffset(e.pageX, e.pageY);
 						createText(layerOffset.x, layerOffset.y);
 					}
 					break;
@@ -256,7 +257,7 @@ angular.module('canvas', [
 				case 'rectangle':
 				case 'text':
 					if ($scope.state.action == 'drawing') {
-						layerOffset = getLayerOffset(e.pageX, e.pageY);
+						layerOffset = Layer.getOffset(e.pageX, e.pageY);
 						Drawing.current.layerCurrent.setEndpoint(layerOffset.x, layerOffset.y);
 					}
 					break;
@@ -337,15 +338,6 @@ angular.module('canvas', [
 			});
 			return res;
 		};
-
-		function getLayerOffset(layerX, layerY) {
-			var canvasOffset = $('.canvas:first').offset();
-
-			return {
-				x: layerX - canvasOffset.left,
-				y: layerY - canvasOffset.top
-			};
-		}
 
 		function createText(startX, startY) {
 			Drawing.current.layers.forEach(function(layer) {
