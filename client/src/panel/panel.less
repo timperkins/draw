@@ -150,9 +150,9 @@
           }
           .action-buttons {
             float: right;
-            display: none;
 
             i {
+              display: none;
               color: #888;
               font-size: 14px;
               background: none;
@@ -163,11 +163,16 @@
               &:hover {
                 color: #fff;
               }
+              &.fa-lock {
+                display: inherit;
+              }
             }
           }
           &:hover {
             .action-buttons {
-              display: inherit;
+              i {
+                display: inherit;
+              }
             }
           }
         }
