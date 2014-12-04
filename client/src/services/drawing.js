@@ -201,7 +201,7 @@ angular.module('services.drawing', [
 			}
 			return;
 		}, function(newVal, oldVal) {
-			if (!Drawing.current || Drawing.current.layerCurrent.background || Drawing.current.layerCurrent.type == 'text') {
+			if (!Drawing.current || (Drawing.current.layerCurrent && (Drawing.current.layerCurrent.background || Drawing.current.layerCurrent.type == 'text'))) {
 				return;
 			}
 			Drawing.current.layerOutline = Drawing.current.layerCurrent;
