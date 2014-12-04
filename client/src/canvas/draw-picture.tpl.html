@@ -1,5 +1,6 @@
 <svg class="layer-wrap">
   <image
+    ng-if="layer.imageLoaded"
     ng-attr-x="{{ layer.getX() }}" 
     ng-attr-y="{{ layer.getY() }}" 
     ng-attr-width="{{ layer.width }}" 
@@ -11,4 +12,12 @@
     ng-attr-ry="{{ layer.radius }}" 
     xlink:href="{{ layer.src | trusted }}">
   </image>
+  <rect
+    ng-if="!layer.imageLoaded"
+    class="image-placeholder"
+    ng-attr-x="{{ layer.getX() }}" 
+    ng-attr-y="{{ layer.getY() }}" 
+    ng-attr-width="{{ layer.width }}" 
+    ng-attr-height="{{ layer.height }}">
+  </rect>
 </svg>

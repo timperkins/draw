@@ -6,8 +6,14 @@ angular.module('services.picture', [
 		var Picture = function(data) {
 			var self = this;
 
+			self.imageLoaded = false;
+
 			Layer.call(self, data);
 			angular.extend(self, data);
+
+			Picture.loadPicture(self.src).then(function() {
+				self.imageLoaded = true;
+			});
 		};
 		Picture.prototype = Object.create(Layer.prototype);
 		Picture.loadPicture = function(url) {
