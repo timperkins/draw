@@ -27,7 +27,9 @@ angular.module('overlay', [
 				height: image.nativeHeight,
 				title: 'Picture (' + 0 + ')',
 				type: 'picture',
-				src: image.src
+				src: image.src,
+				nativeWidth: image.nativeWidth,
+				nativeHeight: image.nativeHeight
 			});
 			var insertIndex = Drawing.current.layerCurrent ? Drawing.current.layerCurrent.index : 0;
 

@@ -10,7 +10,8 @@
     ng-attr-fill-opacity="{{ layer.getOpacity() }}"
     ng-attr-rx="{{ layer.radius }}"
     ng-attr-ry="{{ layer.radius }}" 
-    xlink:href="{{ layer.src | trusted }}">
+    xlink:href="{{ layer.src | trusted }}"
+    preserveAspectRatio="none">
   </image>
   <rect
     ng-if="!layer.imageLoaded"

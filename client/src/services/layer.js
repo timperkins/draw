@@ -108,6 +108,8 @@ angular.module('services.layer', [
 			// this.save();
 		};
 		Layer.prototype.resizeLine = function(e, location, newX, newY) {
+			var self = this;
+
 			if (!angular.isArray(location)) {
 				location = [location];
 			}
@@ -140,7 +142,6 @@ angular.module('services.layer', [
 						if (newY > this.topY) {
 							this.y = this.topY;
 							this.height = newY - this.topY;
-							console.log('new y', newY, this.height);
 						} else {
 							// console.log('new y', newY, this.topY);
 							this.y = newY;
@@ -158,14 +159,8 @@ angular.module('services.layer', [
 						break;
 				}
 			}
-			// Draw a square if the shift key is down (only on diagonal)
-			if (e.shiftKey && location.length == 2) {
-				console.log('shift', this.width, this.height);
-				if (this.width > this.height) {
-					this.width = this.height;
-				} else {
-					this.height = this.width;
-				}
+			if (location.length == 2) {
+				self._shiftClickAdjust(e);
 			}
 		};
 		Layer.prototype.mouseDown = function(e, action) {
@@ -283,7 +278,7 @@ angular.module('services.layer', [
 		// It sets the x, y, width, and height properties of the layer 
 		// We let width, height be negative while drawing so as to simplify 
 		// the math. x and y are corrected after drawing ends (see this.endDrawing())
-		Layer.prototype.setEndpoint = function(endX, endY) {
+		Layer.prototype.setEndpoint = function(e, endX, endY) {
 			var self = this,
 				newWidth = self.width, 
 				newHeight, 
@@ -295,6 +290,25 @@ angular.module('services.layer', [
 			self.height = endY - self.y;
 			self.endX = endX;
 			self.endY = endY;
+			self._shiftClickAdjust(e);
+		};
+
+		Layer.prototype._shiftClickAdjust = function(e) {
+			var self = this;
+
+			// Draw a square if the shift key is down
+			if (e.shiftKey) {
+				console.log('shift', self.width, self.height);
+				if (self.width > self.height) {
+					self.width = self.height;
+					// console.log('rightX', self.rightX);
+					// self.x = self.rightX - self.width;
+				} else {
+					self.height = self.width;
+					// console.log('bottomY', self.bottomY);
+					// self.y = self.bottomY - self.height;
+				}
+			}
 		};
 
 

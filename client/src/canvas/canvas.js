@@ -258,7 +258,7 @@ angular.module('canvas', [
 				case 'text':
 					if ($scope.state.action == 'drawing') {
 						layerOffset = Layer.getOffset(e.pageX, e.pageY);
-						Drawing.current.layerCurrent.setEndpoint(layerOffset.x, layerOffset.y);
+						Drawing.current.layerCurrent.setEndpoint(e, layerOffset.x, layerOffset.y);
 					}
 					break;
 				case 'transform':
